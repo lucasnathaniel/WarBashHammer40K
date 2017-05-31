@@ -112,19 +112,3 @@ void Ranger::setAccuracy(int accuracy){
 int Ranger::getAccuracy(){
 	return this->Accuracy;
 }
-
-void Interface(){
-
-cout << " __          __        ____            _                        " << endl;
-cout << " \\ \\        / /       |  _ \\          | |                       " << endl;
-cout << "  \\ \\  /\\  / /_ _ _ __| |_) | __ _ ___| |__                     " << endl;
-cout << "   \\ \\/  \\/ / _` | '__|  _ < / _` / __| '_ \\                    " << endl;
-cout << "  _ \\  /\\  / (_| | |  | |_) | (_| \\__ \\ | | |_  _    ___  _  __ " << endl;
-cout << " | | \\/ |\\/ \\__,_|_|  |____/ \\__,_|___/_| |_| || |  / _ \\| |/ / " << endl;
-cout << " | |__| | __ _ _ __ ___  _ __ ___   ___ _ __| || |_| | | | ' /  " << endl;
-cout << " |  __  |/ _` | '_ ` _ \\| '_ ` _ \\ / _ \\ '__|__   _| | | |  <   " << endl;
-cout << " | |  | | (_| | | | | | | | | | | |  __/ |     | | | |_| | . \\  " << endl;
-cout << " |_|  |_|\\__,_|_| |_| |_|_| |_| |_|\\___|_|     |_|  \\___/|_|\\_\\ " << endl;
-
-  cout <<"\n\033[96mWelcome to the WarBashHammer, press start\033[0m" << endl;
-}

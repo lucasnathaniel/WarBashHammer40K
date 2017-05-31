@@ -93,6 +93,5 @@ class Ranger : public Card{
 		void setAccuracy(int Accuracy);
 		int getAccuracy();
 };
-void Interface();
 
 #endif

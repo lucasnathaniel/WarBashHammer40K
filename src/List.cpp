@@ -28,13 +28,14 @@ Card* List::getFirst(){
 /**
   *@brief insere um elemento no final da lista
   */
-void List::Insert(string Name, int Life, int Strength, int Sanity, string Type, int Hability){
+void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability){
+      Card* new_card;
     if(Type == "Boss"){
     	Boss* new_card = new Boss(Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Infantary"){
     	Infantary* new_card = new Infantary(Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Mage"){
-		Mage* new_card = new Mage(Name, Life, Strength, Sanity, Hability);
+		  Mage* new_card = new Mage(Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Tech"){
     	Tech* new_card = new Tech(Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Tank"){
@@ -48,7 +49,7 @@ void List::Insert(string Name, int Life, int Strength, int Sanity, string Type, 
     	exit(0);
     }
     if(First == NULL){
-		new_card->setNext(First);
+		  new_card->setNext(First);
     	First = new_card;
     	this->Quantity++;
 		return;
@@ -61,20 +62,4 @@ void List::Insert(string Name, int Life, int Strength, int Sanity, string Type, 
     }
     percorre->setNext(new_card);
     this->Quantity++;
-}
-/**
-  *@brief Separador de string em substrings
-  */
-void separar(string& str, char delim, vector<string>& pedacos) {
-    string::size_type i = 0;
-    string::size_type j = str.find(delim);
-
-    while (j != string::npos) {
-        pedacos.push_back(str.substr(i, j - i));
-        i = ++j;
-        j = str.find(delim, j);
-
-        if (j == string::npos)
-            pedacos.push_back(str.substr(i, str.length()));
-    }
 }

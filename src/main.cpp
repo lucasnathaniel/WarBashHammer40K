@@ -26,6 +26,8 @@ using namespace std;
 int main(){
 
 	string start;
+	char option;
+	char button;
 	while(1){
 		system("clear");
 		Interface();
@@ -34,6 +36,44 @@ int main(){
    		if(start != "start"){
    			continue;
    		}
+   		cout << "Choose someone option: " << endl;
+   		cout << "(1) Start Game" << endl;
+		cout << "(2) Tutorial" << endl;
+		cout << "(3) Class Table" << endl;
+		cout << "(4) About Races" << endl;
+		cout << "(5) Exit" << endl;
+		cin >> option;
+		switch(option){
+			case '1':
+				StartGame();
+				cout << "Press someone button" << endl;
+				cin >> button;
+				break;
+			case '2':
+				Tutorial();
+				cout << "Press someone button" << endl;
+				cin >> button;
+				break;
+			case '3':
+				ClassTable();
+				cout << "Press someone button" << endl;
+				cin >> button;
+				break;
+			case '4':
+				AboutRaces();
+				cout << "Press someone button" << endl;
+				cin >> button;
+				break;
+			case '5':
+				cout << "Come back often! :)" << endl;
+				return 0;
+				break;
+			default:
+				cout << "Incorrect digit!" << endl;
+				cout << "Press someone button" << endl;
+				cin >> button;
+				break;
+		}
 	}
 
 	return 0;
