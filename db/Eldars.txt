@@ -1,0 +1,8 @@
+Mage Eldar_WarLock 300 250 5 5
+Infantary Eldar_Guardian 350 200 5 5
+Infantary Howling_Banshee 300 250 5 5
+Ranger Dire_Avanger 250 250 5 5
+Ranger Fire_Dragon 300 200 5 5
+Tech Farseer 350 150 5 5
+Boss Autarch 800 400 5 5
+Medic Eldar_Priest 300 60 5 5

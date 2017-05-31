@@ -1,0 +1,9 @@
+Boss Captain 700 350 5 5
+Ranger Devastator 300 200
+Ranger Terminator 280 230
+Mage Librarian 250 300 5 5
+Medic Apothecary 250 100 5 5
+Tank Dreadnought 1000 100 5 5
+Tech TechMarine 300 150 5 5
+Infantary AssaultMarine 300 250 5 3
+Infantary ScoutMarine 280 230 5 5

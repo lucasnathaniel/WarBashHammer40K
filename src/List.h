@@ -23,8 +23,7 @@ class List{
 		List();
     	~List();
     	Card* getFirst();
-    	void InsertBegin(string Name, int Life, int Strength, int Sanity, int Hability, int Especial);
-    	void InsertEnd(string Name, int Life, int Strength, int Sanity, int Hability, int Especial);
+    	void Insert(string Name, int Life, int Strength, int Sanity, string Type, int Hability);
 };
 
 void separar(string& str, char delim, vector<string>& pedacos);

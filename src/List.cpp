@@ -26,48 +26,40 @@ Card* List::getFirst(){
 	return First;
 }
 /**
-  *@brief insere um elemento no comeco da lista
+  *@brief insere um elemento no final da lista
   */
-void List::InsertBegin(string Name, int Life, int Strength, int Sanity, int Hability, string type, int Especial){
-    if(type == "Boss"){
-
-    }else if(type == "Infantary"){
-    	Card* new_card = new Infantary(Name, Life, Strength, Sanity, Hability, Especial);
-    }else if(type == "Mage"){
-
-    }else if(type == "Tech"){
-
-    }else if(type == "Tank"){
-
-    }else if(type == "Medic"){
-
-    }else if(type == "Ranger"){
-
+void List::Insert(string Name, int Life, int Strength, int Sanity, string Type, int Hability){
+    if(Type == "Boss"){
+    	Boss* new_card = new Boss(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Infantary"){
+    	Infantary* new_card = new Infantary(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Mage"){
+		Mage* new_card = new Mage(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Tech"){
+    	Tech* new_card = new Tech(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Tank"){
+    	Tank* new_card = new Tank(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Medic"){
+    	Medic* new_card = new Medic(Name, Life, Strength, Sanity, Hability);
+    }else if(Type == "Ranger"){
+    	Ranger* new_card = new Ranger(Name, Life, Strength, Sanity, Hability);
     }else{
     	cout << "Unidef type, exit!" << endl;
     	exit(0);
     }
-    novo->setNext(First);
-    First = novo;
-    this->Quantity++;
-}
-/**
-  *@brief insere um elemento no final da lista
-  */
-void List::InsertEnd(string Name, int Life, int Strength, int Sanity, int Hability, int Especial){
-    
     if(First == NULL){
-		InsertBegin(Name, Life, Strength, Sanity, Hability, Especial);
+		new_card->setNext(First);
+    	First = new_card;
+    	this->Quantity++;
 		return;
 	}
     
-    Card* novo = new Card(Name, Life, Strength, Sanity, Hability, Especial);
     Card* percorre = First;
     
     while(percorre->getNext() != NULL){
     	percorre = percorre->getNext();
     }
-    percorre->setNext(novo);
+    percorre->setNext(new_card);
     this->Quantity++;
 }
 /**
