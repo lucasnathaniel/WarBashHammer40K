@@ -24,6 +24,7 @@ class List{
     	~List();
     	Card* getFirst();
     	void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
+      void PrintList();
 };
 
 #endif

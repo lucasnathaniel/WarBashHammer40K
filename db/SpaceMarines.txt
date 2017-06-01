@@ -1,6 +1,6 @@
 Boss Captain 700 350 5 5
-Ranger Devastator 300 200
-Ranger Terminator 280 230
+Ranger Devastator 300 200 5 5
+Ranger Terminator 280 230 5 5
 Mage Librarian 250 300 5 5
 Medic Apothecary 250 100 5 5
 Tank Dreadnought 1000 100 5 5

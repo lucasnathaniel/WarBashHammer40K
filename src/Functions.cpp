@@ -38,8 +38,9 @@ void StartGame(){
 			return;
 		}
 		List *your_list = ReadRace(address);
+		cout << "Your deck: " << endl;
+		your_list->PrintList();
 		
-		system("clear");
 		cout << "\033[96mChoose the enemy race!\033[0m" << endl;
 		cout << "(1) SpaceMarines" << endl;
 		cout << "(2) Eldars" << endl;
@@ -57,6 +58,8 @@ void StartGame(){
 		}
 		
 		List *enemy_list = ReadRace(address);
+		cout << "Enemy deck: " << endl;
+		enemy_list->PrintList();
 	}
 
 }
@@ -74,8 +77,8 @@ List *ReadRace(string address){
 	if(database.is_open()){
 		while(getline(database, line)){
 			part(line, ' ', v);
-			race->Insert(v[0+count*6], v[1+count*6], stoi(v[2+count*6]), stoi(v[3+count*6]), stoi(v[4+count*6]), stoi(v[5+count*6]));
-			count+=1;
+			race->Insert(v[0+count*6], v[1+count*6], stoi(v[2+count*6]), stoi(v[3+count*6]), stoi(v[4+count*6]), stoi(v[4+count*6]));
+			count++;
 		}
 		database.close();
 	}
@@ -86,10 +89,10 @@ List *ReadRace(string address){
   *@brief Separe string on substrings
   */
 void part(string& str, char delim, vector<string>& pieces){
+    
     string::size_type i = 0;
     string::size_type j = str.find(delim);
-
-    while (j != string::npos) {
+    while (j != string::npos){
         pieces.push_back(str.substr(i, j - i));
         i = ++j;
         j = str.find(delim, j);

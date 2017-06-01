@@ -9,6 +9,7 @@
 using namespace std;
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "Card.h"
 #include "List.h"
 
