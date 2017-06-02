@@ -19,8 +19,8 @@ cout << " \033[01;93m |_|  |_|\\__,_|_| |_| |_|_| |_| |_|\\___|_|     \033[31m|_
 void StartGame(){
 
 	while(1){
-		system("clear");
-		cout << "\033[96mChoose your race!\033[0m" << endl;
+		//system("clear");
+		cout << "\n\033[96mChoose your race!\033[0m" << endl;
 		char your_race, enemy_race;
 		string address;
 		cout << "(1) SpaceMarines" << endl;
@@ -40,8 +40,7 @@ void StartGame(){
 		List *your_list = ReadRace(address);
 		cout << "Your deck: " << endl;
 		your_list->PrintList();
-		
-		cout << "\033[96mChoose the enemy race!\033[0m" << endl;
+		cout << "\n\033[96mChoose the enemy race!\033[0m" << endl;
 		cout << "(1) SpaceMarines" << endl;
 		cout << "(2) Eldars" << endl;
 		cout << "(3) Orks" << endl;
@@ -103,12 +102,21 @@ void part(string& str, char delim, vector<string>& pieces){
 }
 
 void Tutorial(){
-
+	system("clear");
+	cout << "\033[96m-=-=-=-=-=-=-=-= Hello player, welcome to the Tutorial! =-=-=-=-=-=-=-=-\033[0m\n" << endl;
+	cout << "\033[2;4;3m1-This game is very simple: Win the game who defeat all the enemys" << endl;
+	cout << "2-Classes have advantage about others, you can see this on 'ClassTable' option" << endl;
+	cout << "3-Classes have active and passive skills, you can see this on 'ClassTable' option" << endl;
+	cout << "4-A card have: Life, Strength, Sanity, and a Special Skill, that you can see on 'ClassTable' option" << endl;
+	cout << "5-The player can play only 2 moves: down a card on the field, attack a enemy, or use a active skill" << endl;
+	cout << "6-The player can play with 3 races: SpaceMarines, Eldars and Orks, each race have quantity" << endl;
+	cout << "and diferent classes, you can see about this on 'About Races' option" << endl;
+	cout << "\033[96m7-Enjoy\033[0;91m :)\033[0;0;0m" << endl;
 }
 
 void ClassTable(){
 	
-	cout << "This is the ClassTable, the line represts if a class have advantage over another, \033[42mGreen = yes\033[0m, \033[101mRed = no\033[0m" << endl;
+	cout << "This is the ClassTable, the color represts if a class have advantage over another, \033[42mGreen = yes\033[0m, \033[101mRed = no\033[0m" << endl;
 
 	cout << "+-----------+----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
 	cout << "|           |   \033[95mBoss\033[0m   | \033[93mInfantary\033[0m |   \033[34mMage\033[0m    |   \033[91mTech\033[0m    |   \033[37mTank\033[0m    |   \033[96mMedic\033[0m   |  \033[92mRanger\033[0m   |" << endl;

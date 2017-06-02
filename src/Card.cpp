@@ -6,7 +6,7 @@
 /**
   *@brief Construtor com parâmetros
   */
-Card::Card(string name, int life, int strength, int sanity){
+Card::Card(string type, string name, int life, int strength, int sanity){
   this->setNext(NULL);
 }
 /**
@@ -20,6 +20,12 @@ Card::~Card(){
   */
 Card::Card(){
 	this->setNext(NULL);
+}
+void Card::setType(string Type){
+  this->Type = Type;
+}
+string Card::getType(){
+  return this->Type;
 }
 void Card::setName(string Name){
   this->Name = Name;
@@ -60,7 +66,8 @@ Card* Card::getNext(){
 /**
   *@brief Interface Gráfica
   */
-Boss::Boss(string name, int life, int strength, int sanity, int fury){
+Boss::Boss(string type, string name, int life, int strength, int sanity, int fury){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -76,7 +83,8 @@ int Boss::getFury(){
 	return this->Fury;
 }
 
-Infantary::Infantary(string name, int life, int strength, int sanity, int determination){
+Infantary::Infantary(string type, string name, int life, int strength, int sanity, int determination){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -92,7 +100,8 @@ int Infantary::getDetermination(){
 	return this->Determination;
 }
 
-Mage::Mage(string name, int life, int strength, int sanity, int intelligence){
+Mage::Mage(string type, string name, int life, int strength, int sanity, int intelligence){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -106,7 +115,8 @@ int Mage::getIntelligence(){
 	return this->Intelligence;
 }
 
-Tech::Tech(string name, int life, int strength, int sanity, int hability){
+Tech::Tech(string type, string name, int life, int strength, int sanity, int hability){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -120,7 +130,8 @@ int Tech::getHability(){
 	return this->Hability;
 }
 
-Tank::Tank(string name, int life, int strength, int sanity, int hardness){
+Tank::Tank(string type, string name, int life, int strength, int sanity, int hardness){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -134,7 +145,8 @@ int Tank::getHardness(){
 	return this->Hardness;
 }
 
-Medic::Medic(string name, int life, int strength, int sanity, int cure){
+Medic::Medic(string type, string name, int life, int strength, int sanity, int cure){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);
@@ -148,7 +160,8 @@ int Medic::getCure(){
 	return this->Cure;
 }
 
-Ranger::Ranger(string name, int life, int strength, int sanity, int accuracy){
+Ranger::Ranger(string type, string name, int life, int strength, int sanity, int accuracy){
+  this->setType(type);
   this->setName(name);
   this->setLife(life);
   this->setStrength(strength);

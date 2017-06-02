@@ -31,19 +31,19 @@ Card* List::getFirst(){
 void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability){
     Card* new_card;
     if(Type == "Boss"){
-    	new_card = new Boss(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Boss(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Infantary"){
-    	new_card = new Infantary(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Infantary(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Mage"){
-		  new_card = new Mage(Name, Life, Strength, Sanity, Hability);
+		  new_card = new Mage(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Tech"){
-    	new_card = new Tech(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Tech(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Tank"){
-    	new_card = new Tank(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Tank(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Medic"){
-    	new_card = new Medic(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Medic(Type, Name, Life, Strength, Sanity, Hability);
     }else if(Type == "Ranger"){
-    	new_card = new Ranger(Name, Life, Strength, Sanity, Hability);
+    	new_card = new Ranger(Type, Name, Life, Strength, Sanity, Hability);
     }else{
     	cout << "Unidef type, exit!" << endl;
     	exit(0);
@@ -67,7 +67,22 @@ void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, 
 void List::PrintList(){
 
     for(Card* card = First; card != NULL; card = card->getNext()){
-        cout << " " << card->getName() << " " << card->getLife() << " " << card->getStrength() << " " << card->getSanity() << " " << endl;
+      if(card->getType() == "Boss"){
+        cout << "\033[95m";
+      }else if(card->getType() == "Infantary"){
+        cout << "\033[93m";
+      }else if(card->getType() == "Mage"){
+        cout << "\033[34m";
+      }else if(card->getType() == "Tech"){
+        cout << "\033[91m";
+      }else if(card->getType() == "Tank"){
+        cout << "\033[37m";
+      }else if(card->getType() == "Medic"){
+        cout << "\033[96m";
+      }else if(card->getType() == "Ranger"){
+        cout << "\033[92m";
+      }
+      cout << card->getType() << " " << card->getName() << " " << card->getLife() << " " << card->getStrength() << " " << card->getSanity() << " ";
+    cout << "\033[0m" << endl;
     }
-    cout << endl;
 }

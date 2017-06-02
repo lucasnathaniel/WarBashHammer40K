@@ -14,6 +14,7 @@ using namespace std;
 
 class Card{
 	private:
+		string Type;
 		string Name;
 		int Life;
 		int Strength;
@@ -21,9 +22,11 @@ class Card{
 		Card* Next;
 
 	public:
-		Card(string Name, int Life, int Strength, int Sanity);
+		Card(string Type, string Name, int Life, int Strength, int Sanity);
 		Card();
 		~Card();
+		void setType(string Type);
+		string getType();
 		void setName(string Name);
 		string getName();
 		void setLife(int Life);
@@ -41,7 +44,7 @@ class Boss : public Card{
 	protected:
 		int Fury;
 	public:
-		Boss(string Name, int Life, int Strength, int Sanity, int Fury);
+		Boss(string Type, string Name, int Life, int Strength, int Sanity, int Fury);
 		void setFury(int Fury);
 		int getFury();
 };
@@ -49,7 +52,7 @@ class Infantary : public Card{
 	protected:
 		int Determination;
 	public:
-		Infantary(string Name, int Life, int Strength, int Sanity, int Determination);
+		Infantary(string Type, string Name, int Life, int Strength, int Sanity, int Determination);
 		void setDetermination(int Determination);
 		int getDetermination();
 };
@@ -57,7 +60,7 @@ class Mage : public Card{
 	protected:
 		int Intelligence;
 	public:
-		Mage(string Name, int Life, int Strength, int Sanity, int Intelligence);
+		Mage(string Type, string Name, int Life, int Strength, int Sanity, int Intelligence);
 		void setIntelligence(int Intelligence);
 		int getIntelligence();
 };
@@ -65,7 +68,7 @@ class Tech : public Card{
 	protected:
 		int Hability;
 	public:
-		Tech(string Name, int Life, int Strength, int Sanity, int Hability);
+		Tech(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
 		void setHability(int Hability);
 		int getHability();
 };
@@ -73,7 +76,7 @@ class Tank : public Card{
 	protected:
 		int Hardness;
 	public:
-		Tank(string Name, int Life, int Strength, int Sanity, int Hardness);
+		Tank(string Type, string Name, int Life, int Strength, int Sanity, int Hardness);
 		void setHardness(int Hardness);
 		int getHardness();
 };
@@ -81,7 +84,7 @@ class Medic : public Card{
 	protected:
 		int Cure;
 	public:
-		Medic(string Name, int Life, int Strength, int Sanity, int Cure);
+		Medic(string Type, string Name, int Life, int Strength, int Sanity, int Cure);
 		void setCure(int Cure);
 		int getCure();
 };
@@ -89,7 +92,7 @@ class Ranger : public Card{
 	protected:
 		int Accuracy;
 	public:
-		Ranger(string Name, int Life, int Strength, int Sanity, int Accuracy);
+		Ranger(string Type, string Name, int Life, int Strength, int Sanity, int Accuracy);
 		void setAccuracy(int Accuracy);
 		int getAccuracy();
 };
