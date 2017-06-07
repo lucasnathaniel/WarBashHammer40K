@@ -18,6 +18,7 @@ void StartGame();
 List* ReadRace(string address);
 void part(string& str, char delim, vector<string>& pedacos);
 void Playing(List* your_list, List* enemy_list);
+List* PutACardOnField(List* the_list, List* the_list_on_field, Card* put_card);
 void Tutorial();
 void ClassTable();
 void AboutRaces();

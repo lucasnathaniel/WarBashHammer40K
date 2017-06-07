@@ -125,106 +125,40 @@ void Playing(List* your_list, List* enemy_list){
 		cout << "Enemy Cards on the field:" << endl;
 		enemy_cards_on_field->PrintList();
 		cout << "\n----------------------------------------" << endl;
-		if(you_count_field == 0){
-			cout << "Please..." << endl;
-			cout << "(1)Pull a card" << endl;
-		}else if(your_list->getQuantity() != 0){
-			cout << "What do you want to do?" << endl;
-			cout << "(1)Pull a card" << endl;
-			cout << "(2)Select a card" << endl;
-		}else{
-			cout << "Please..." << endl;
-			cout << "(1)Select a card" << endl;
-		}
-		cin >> the_play;
-		if(you_count_field == 0){
-			if(the_play == '1'){
-				cout << "Select a card" << endl;
-				cin >> int_play;
-				Card* put_card = your_list->SearchCard(int_play);
-				if(put_card == nullptr){
-					cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
-					cout << "Press a button to restore your intelligence" << endl;
-					cin >> the_play;
-					continue;
-				}
-				your_cards_on_field->Insert(put_card);
+		
+		if(you_count_field == 0){ //If dont have cards on field and and have cards on hand
+			cout << "Please, select a card to put" << endl;
+			cin >> int_play;
+			Card* put_card = your_list->SearchCard(int_play);
+			if(put_card != nullptr){
+				your_cards_on_field = PutACardOnField(your_list, your_cards_on_field, put_card);
 				you_count_field++;
-
-				if(put_card->getType() == "Boss"){
-					cout << "You inserted the \033[95m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Infantary"){
-					cout << "You inserted the \033[93m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Mage"){
-					cout << "You inserted the \033[34m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Tech"){
-					cout << "You inserted the \033[91m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Tank"){
-					cout << "You inserted the \033[37m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Medic"){
-					cout << "You inserted the \033[96m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Ranger"){
-					cout << "You inserted the \033[92m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}
 				your_list->RemoveCard(int_play);
 			}else{
 				cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
 				cout << "Press a button to restore your intelligence" << endl;
 				cin >> the_play;
-				continue;
 			}
-		}else if(your_list->getQuantity() != 0){
-			if(the_play == '1'){
-				cout << "Select a card" << endl;
+		}else{
+			if(your_list->getQuantity() != 0){ //If have cards on field and cards on hand
+				cout << "Please, select a card to put" << endl;
 				cin >> int_play;
 				Card* put_card = your_list->SearchCard(int_play);
-				if(put_card == nullptr){
+				if(put_card != nullptr){
+					your_cards_on_field = PutACardOnField(your_list, your_cards_on_field, put_card);
+					you_count_field++;
+					your_list->RemoveCard(int_play);
+				}else{
 					cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
 					cout << "Press a button to restore your intelligence" << endl;
 					cin >> the_play;
 					continue;
 				}
-				your_cards_on_field->Insert(put_card);
-				you_count_field++;
-
-				if(put_card->getType() == "Boss"){
-					cout << "You inserted the \033[95m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Infantary"){
-					cout << "You inserted the \033[93m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Mage"){
-					cout << "You inserted the \033[34m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Tech"){
-					cout << "You inserted the \033[91m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Tank"){
-					cout << "You inserted the \033[37m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Medic"){
-					cout << "You inserted the \033[96m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}else if(put_card->getType() == "Ranger"){
-					cout << "You inserted the \033[92m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
-				}
-				your_list->RemoveCard(int_play);
-			}else if(the_play == '2'){
-
-
-			}else{
-				cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
-				cout << "Press a button to restore your intelligence" << endl;
-				cin >> the_play;
-				continue;
 			}
-		}else{
-			if(the_play == '1'){
-				cout << "Select a card" << endl;
-				cin >> int_play;
-			}else{
-				cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
-				cout << "Press a button to restore your intelligence" << endl;
-				cin >> the_play;
-				continue;
-			}
+			cout << "Please, select a card to use" << endl;
+			cin >> int_play;
 		}
-
-
+			
 
 
 		if(enemy_list->getQuantity() !=0){ // Inimigo coloca carta aleatoria
@@ -232,9 +166,27 @@ void Playing(List* your_list, List* enemy_list){
 			Card* put_card = enemy_list->SearchCard(random);
 			enemy_cards_on_field->Insert(put_card);
 			enemy_count_field++;
+			string enemy_type = put_card->getType();
+			string enemy_name = put_card->getName();
 			enemy_list->RemoveCard(random);
+			if(enemy_type == "Boss"){
+				cout << "The enemy put \033[95m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Infantary"){
+				cout << "The enemy put \033[93m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Mage"){
+				cout << "The enemy put \033[34m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Tech"){
+				cout << "The enemy put \033[91m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Tank"){
+				cout << "The enemy put \033[37m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Medic"){
+				cout << "The enemy put \033[96m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}else if(enemy_type == "Ranger"){
+				cout << "The enemy put \033[92m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+			}
 		}
-
+		cout << "\nPress some button to continue" << endl;
+		cin >> the_play;
 	
 
 	}
@@ -248,6 +200,28 @@ void Playing(List* your_list, List* enemy_list){
 	if(enemy_list->getQuantity() == 0){
 		cout << "NOT BAD :|" << endl;
 	}
+}
+
+List* PutACardOnField(List* your_list, List* your_cards_on_field, Card* put_card){
+	
+	your_cards_on_field->Insert(put_card);
+	
+	if(put_card->getType() == "Boss"){
+		cout << "You put the \033[95m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Infantary"){
+		cout << "You put the \033[93m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Mage"){
+		cout << "You put the \033[34m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Tech"){
+		cout << "You put the \033[91m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Tank"){
+		cout << "You put the \033[37m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Medic"){
+		cout << "You put the \033[96m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}else if(put_card->getType() == "Ranger"){
+		cout << "You put the \033[92m" << put_card->getType() << " " << put_card->getName() << "\033[0m on the field" << endl;
+	}
+	return your_cards_on_field;
 }
 
 void Tutorial(){
@@ -276,41 +250,50 @@ void ClassTable(){
 	cout << "| \033[95mBoss\033[0m      |\033[100m          \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|" << endl;
 	cout << "| \033[93mInfantary\033[0m |\033[101m          \033[0m|\033[100m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|" << endl;
 	cout << "| \033[34mMage\033[0m      |\033[101m          \033[0m|\033[42m           \033[0m|\033[100m           \033[0m|\033[42m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|" << endl;
-	cout << "| \033[91mTech\033[0m      |\033[101m          \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[100m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|" << endl;
+	cout << "| \033[91mTech\033[0m      |\033[101m          \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[100m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|" << endl;
 	cout << "| \033[37mTank\033[0m      |\033[101m          \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[101m           \033[0m|\033[100m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|" << endl;
 	cout << "| \033[96mMedic\033[0m     |\033[101m          \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[100m           \033[0m|\033[101m           \033[0m|" << endl;
 	cout << "| \033[92mRanger\033[0m    |\033[101m          \033[0m|\033[42m           \033[0m|\033[42m           \033[0m|\033[101m           \033[0m|\033[101m           \033[0m|\033[42m           \033[0m|\033[100m           \033[0m|" << endl;
 	cout << "+-----------+----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
 
 	cout << "\n-=-=-=-=-=-=-=-= Special Skills: =-=-=-=-=-=-=-=-" << endl;
-	cout << "Passives:\n" << endl;
+	cout << "\n\033[1mPassives:\n" << endl;
 	cout << "\033[95mBoss\033[0m     : increase all allys attack + (Fury * 5% Strength)" << endl;
 	cout << "\033[93mInfantary\033[0m: increase her attack + (Determination * 10% Strength)" << endl;
-	cout << "\033[34mMage\033[0m     : all enemys take the Mage intelligence * 10 damage, increase defense of all allys Mage intelligence * 10." << endl;
-	cout << "\033[91mTech\033[0m     : play one more time." << endl;
+	cout << "\033[34mMage\033[0m     : all enemys take the (Intelligence * 10), increase defense of all allys (Intelligence * 10)." << endl;
+	cout << "\033[91mTech\033[0m     : the player can play again." << endl;
 	cout << "\033[37mTank\033[0m     : block the all the first attack." << endl;
-	cout << "\033[96mMedic\033[0m    : cure all allys in Medic Cure * 20." << endl;
-	cout << "\033[92mRanger\033[0m   : when a enemy enter on the field, he's attacked with Ranger Accuracy * 10% damage." << endl;
-	cout << "Actives:\n" << endl;
-	cout << "\033[95mBoss\033[0m     : Tremmor: attack all enemys with her Fury * 10% Strength." << endl;
-	cout << "\033[93mInfantary\033[0m: Battleon: attack 2 times." << endl;
-	cout << "\033[34mMage\033[0m     : SpellWave: manipulate a enemy, depending of his sanity." << endl;
-	cout << "\033[91mTech\033[0m     : Hacker: manipulate a enemy, depending of his special hability" << endl;
-	cout << "\033[37mTank\033[0m     : Mountain: Select a ally to block your next damage" << endl;
-	cout << "\033[96mMedic\033[0m    : Sunshine: heal fully a ally." << endl;
-	cout << "\033[92mRanger\033[0m   : Ragnarok: attack again." << endl;
+	cout << "\033[96mMedic\033[0m    : cure all allys in (Cure * 20)." << endl;
+	cout << "\033[92mRanger\033[0m   : when a enemy enter on the field, he's attacked with (Accuracy * 10% Strength)." << endl;
+	cout << "\n\033[1mActives:\n" << endl;
+	cout << "\033[95mBoss\033[0m     : Tremmor(3 rounds): attack all enemys with her (Fury * 10% Strength)." << endl;
+	cout << "\033[93mInfantary\033[0m: Battleon(2 rounds): attack 2 times." << endl;
+	cout << "\033[34mMage\033[0m     : SpellWave(3 rounds): manipulate a enemy, depending of sanity of the enemy(10*Sanity - 60%)" << endl;
+	cout << "\033[91mTech\033[0m     : Hacker(3 rounds): manipulate a enemy, depending of her (Hability * 5%)" << endl;
+	cout << "\033[37mTank\033[0m     : Mountain(2 rounds): Select a ally to block your next damage" << endl;
+	cout << "\033[96mMedic\033[0m    : Sunshine(1 round): heal fully a ally." << endl;
+	cout << "\033[92mRanger\033[0m   : Ragnarok(2 rounds): Select a enemy to give a explosed shot(Accuracy * 20% Strength)." << endl;
 }
 
 void AboutRaces(){
 
 	system("clear");
 	cout << "\033[96m-=-=-=-=-=-=-=-= Hello player, welcome to the AboutRaces! =-=-=-=-=-=-=-=-\033[0m\n" << endl;
-	cout << "SpaceMarines:" << endl;
+	cout << "\033[1mSpaceMarines:\033[0m" << endl;
 	cout << "\t The Space Marines or Adeptus Astartes are foremost amongst the defenders of humanity," << endl;
-	cout << "the greatest of the Emperor of Mankind's warriors. They are barely human at all, but superhuman;" << endl;
-	cout << "having been made superior in all respects to a normal man by a harsh regime of genetic modification," << endl;
-	cout << "psycho-conditioning and rigorous training." << endl;
-	cout << "Eldars:" << endl;
+	cout << "\tthe greatest of the Emperor of Mankind's warriors. They are barely human at all, but superhuman;" << endl;
+	cout << "\thaving been made superior in all respects to a normal man by a harsh regime of genetic modification," << endl;
+	cout << "\tpsycho-conditioning and rigorous training." << endl;
+	cout << "\033[1mEldars:\033[0m" << endl;
+	cout << "\tThe Eldar or Aeldari as they were known in the Eldar Lexicon before the fall of their lost realm, " << endl;
+	cout << "\tare an ancient humanoid alien race whose vast empire once extended the width and breadth of the known galaxy." << endl;
+	cout << "\tTheir empire was without equal, and they counted themselves masters of the stars. The Eldar race has a" << endl;
+	cout << "\tlong and complex spacefaring history, so long in fact that little is known for certain about the course of" << endl;
+	cout << "\ttheir physical evolution and early planet-bound existence." << endl;
+	cout << "\033[1mOrks:\033[0m" << endl;
+	cout << "\tThe Orks, also called Greenskins, are a savage, warlike, green-skinned race of humanoids who are spread all" << endl;
+ 	cout << "\tacross the Milky Way Galaxy. They share many features with Warhammer Fantasy Orcs. They are seen by their " << endl;
+ 	cout << "\tenemies (pretty much everyone else in the universe) as savage, warlike, and crude, but they are the most " << endl;
+ 	cout << "\tsuccessful species in the whole galaxy, outnumbering possibly every other intelligent race, even Mankind." << endl;
 
-	cout << "Orks:" << endl;
-}
+ }
