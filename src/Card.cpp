@@ -7,7 +7,10 @@
   *@brief Construtor com parâmetros
   */
 Card::Card(string type, string name, int life, int strength, int sanity){
-  this->setNext(NULL);
+  this->setNext(nullptr);
+}
+Card::Card(){
+	this->setNext(nullptr);
 }
 /**
   *@brief Destrutor
@@ -18,9 +21,6 @@ Card::~Card(){
 /**
   *@brief Construtor sem parâmetros
   */
-Card::Card(){
-	this->setNext(NULL);
-}
 void Card::setType(string Type){
   this->Type = Type;
 }

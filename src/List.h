@@ -23,8 +23,12 @@ class List{
 		List();
     	~List();
     	Card* getFirst();
+      	int getQuantity();
     	void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
-      void PrintList();
+    	void Insert(Card* new_card);
+      	void PrintList();
+      	Card* SearchCard(int indice);
+      	void RemoveCard(int indice);
 };
 
 #endif

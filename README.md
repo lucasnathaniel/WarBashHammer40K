@@ -14,7 +14,11 @@
 
 > O objetivo deste trabalho é implementar um jogo estilo card game em bash utilizando estruturas de lista, escolhi o universo warhammer40k para tal.
 
+>A resolução mínima do terminal para o programa rodar perfeitamente é 75x25
+
 Arquivo no git: <https://github.com/lucasnathaniel/WarBashHammer40K>
+
+Há uma sobrecarga da função Insert nos arquivos List.h/List.cpp
 
 ## Compilação
 

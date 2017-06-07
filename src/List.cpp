@@ -25,6 +25,9 @@ List::~List(){
 Card* List::getFirst(){
 	return First;
 }
+int List::getQuantity(){
+  return Quantity;
+}
 /**
   *@brief insere um elemento no final da lista
   */
@@ -64,25 +67,118 @@ void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, 
     this->Quantity++;
 }
 
-void List::PrintList(){
+void List::Insert(Card* new_card){
+    Card* card;
+    if(new_card->getType() == "Boss"){
+    	Boss* boss = (Boss*)new_card;
+    	card = new Boss(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), boss->getFury());
+    }else if(new_card->getType() == "Infantary"){
+    	Infantary* infantary = (Infantary*)new_card;
+    	card = new Infantary(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), infantary->getDetermination());
+    }else if(new_card->getType() == "Mage"){
+		Mage* mage = (Mage*)new_card;
+		card = new Mage(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), mage->getIntelligence());
+    }else if(new_card->getType() == "Tech"){
+    	Tech* tech = (Tech*)new_card;
+    	card = new Tech(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), tech->getHability());
+    }else if(new_card->getType() == "Tank"){
+    	Tank* tank = (Tank*)new_card;
+    	card = new Tank(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), tank->getHardness());
+    }else if(new_card->getType() == "Medic"){
+    	Medic* medic = (Medic*)new_card;
+    	card = new Medic(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), medic->getCure());
+    }else if(new_card->getType() == "Ranger"){
+    	Ranger* ranger = (Ranger*)new_card;
+    	card = new Ranger(new_card->getType(), new_card->getName(), new_card->getLife(), new_card->getStrength(), new_card->getSanity(), ranger->getAccuracy());
+    }else{
+    	cout << "Unidef type, exit!" << endl;
+    	exit(0);
+    }
+    if(First == NULL){
+    	card->setNext(First);
+    	First = card;
+    	this->Quantity++;
+		return;
+	}
+    
+    Card* percorre = First;
+    
+    while(percorre->getNext() != NULL){
+    	percorre = percorre->getNext();
+    }
+    percorre->setNext(card);
+    this->Quantity++;
+}
 
+void List::PrintList(){
+	int i = 1;
     for(Card* card = First; card != NULL; card = card->getNext()){
       if(card->getType() == "Boss"){
-        cout << "\033[95m";
+        Boss* boss = (Boss*)card;
+        cout << "(" << i << ") " <<"\033[95m";
+        cout << boss->getType() << " " << boss->getName() << " " << boss->getLife() << " " << boss->getStrength() << " " << boss->getSanity() << " " << boss->getFury();
       }else if(card->getType() == "Infantary"){
-        cout << "\033[93m";
+        Infantary* infantary = (Infantary*)card;
+        cout << "(" << i << ") " << "\033[93m";
+        cout << infantary->getType() << " " << infantary->getName() << " " << infantary->getLife() << " " << infantary->getStrength() << " " << infantary->getSanity() << " " << infantary->getDetermination();
       }else if(card->getType() == "Mage"){
-        cout << "\033[34m";
+        Mage* mage = (Mage*)card;
+        cout << "(" << i << ") " << "\033[34m";
+        cout << mage->getType() << " " << mage->getName() << " " << mage->getLife() << " " << mage->getStrength() << " " << mage->getSanity() << " " << mage->getIntelligence();
       }else if(card->getType() == "Tech"){
-        cout << "\033[91m";
+        Tech* tech = (Tech*)card;
+        cout << "(" << i << ") " << "\033[91m";
+        cout << tech->getType() << " " << tech->getName() << " " << tech->getLife() << " " << tech->getStrength() << " " << tech->getSanity() << " " << tech->getHability();
       }else if(card->getType() == "Tank"){
-        cout << "\033[37m";
+        Tank* tank = (Tank*)card;
+        cout << "(" << i << ") " << "\033[37m";
+        cout << tank->getType() << " " << tank->getName() << " " << tank->getLife() << " " << tank->getStrength() << " " << tank->getSanity() << " " << tank->getHardness();
       }else if(card->getType() == "Medic"){
-        cout << "\033[96m";
+        Medic* medic = (Medic*)card;
+        cout << "(" << i << ") " << "\033[96m";
+        cout << medic->getType() << " " << medic->getName() << " " << medic->getLife() << " " << medic->getStrength() << " " << medic->getSanity() << " " << medic->getCure();
       }else if(card->getType() == "Ranger"){
-        cout << "\033[92m";
+        Ranger* ranger = (Ranger*)card;
+        cout << "(" << i << ") " << "\033[92m";
+        cout << ranger->getType() << " " << ranger->getName() << " " << ranger->getLife() << " " << ranger->getStrength() << " " << ranger->getSanity() << " " << ranger->getAccuracy();
       }
-      cout << card->getType() << " " << card->getName() << " " << card->getLife() << " " << card->getStrength() << " " << card->getSanity() << " ";
+    i++;
     cout << "\033[0m" << endl;
     }
+}
+
+Card* List::SearchCard(int indice){
+	if(indice>this->getQuantity() || indice == 0){
+		return nullptr;
+	}
+	Card* card = First;
+	for(int i = 1; i < indice; i++){
+		card = card->getNext();
+	}
+	return card;
+}
+
+void List::RemoveCard(int indice){
+	
+	if(this->getQuantity() == 1){
+		delete First;
+		Quantity--;
+		return;
+	}
+	if(indice == 1){
+		Card* fir = First->getNext();
+		delete First;
+		First = fir;
+		this->Quantity--;
+		return;
+	}
+	Card* run_before = First;
+	Card* run = run_before->getNext();
+	for(int i = 1; i < indice-1; i++){
+		run_before = run_before->getNext();
+		run = run_before->getNext();
+	}
+	run_before->setNext(run->getNext());
+	delete run;
+	this->Quantity--;
 }

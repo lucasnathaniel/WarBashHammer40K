@@ -17,6 +17,7 @@ void Interface();
 void StartGame();
 List* ReadRace(string address);
 void part(string& str, char delim, vector<string>& pedacos);
+void Playing(List* your_list, List* enemy_list);
 void Tutorial();
 void ClassTable();
 void AboutRaces();
