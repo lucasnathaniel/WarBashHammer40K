@@ -128,26 +128,34 @@ void Playing(List* your_list, List* enemy_list){
 			if(put_card->getType() == "Boss" && enemy_can_put_boss > 0){ // if the enemy try put a boss without lost 3 cards
 				continue;
 			}
+			//you range passive damage
+			int enemy_range_damage = your_cards_on_field->RangerPassive();
+			if(enemy_range_damage != 0){
+				put_card->setLife(put_card->getLife() - enemy_range_damage);
+				cout << "the card that the enemy placed, took " << enemy_range_damage << " damage, because have rangers(s) on you side" << endl;
+			}
+			//end of range passive
 			enemy_cards_on_field->Insert(put_card);
 			enemy_count_field++;
 			string enemy_type = put_card->getType();
 			string enemy_name = put_card->getName();
 			enemy_list->RemoveCard(random);
 			if(enemy_type == "Boss"){
-				cout << "The enemy put \033[95m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[95m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Infantary"){
-				cout << "The enemy put \033[93m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[93m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Mage"){
-				cout << "The enemy put \033[34m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[34m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Tech"){
-				cout << "The enemy put \033[91m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[91m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Tank"){
-				cout << "The enemy put \033[37m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[37m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Medic"){
-				cout << "The enemy put \033[96m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[96m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}else if(enemy_type == "Ranger"){
-				cout << "The enemy put \033[92m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
+				cout << "The \033[91menemy\033[0m put \033[92m" << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;
 			}
+			
 		}
 		//End of enemy play
 
@@ -167,7 +175,7 @@ void Playing(List* your_list, List* enemy_list){
 		//Your play
 		string invalid = "invalid";
 		if(you_count_field == 0){ //If dont have cards on field and and have cards on hand
-			cout << "Please, select a card to put" << endl;
+			cout << "Please, \033[34mselect a card\033[0m to put" << endl;
 			cin >> int_play;
 			Card* put_card = your_list->SearchCard(int_play);
 			if(put_card != nullptr){
@@ -194,7 +202,7 @@ void Playing(List* your_list, List* enemy_list){
 			}
 		}else{
 			if(your_list->getQuantity() != 0){ //If have cards on field and cards on hand
-				cout << "Please, select a card to put" << endl;
+				cout << "Please, \033[34mselect a card\033[0m to put" << endl;
 				cin >> int_play;
 				Card* put_card = your_list->SearchCard(int_play);
 				if(put_card != nullptr){
@@ -220,7 +228,7 @@ void Playing(List* your_list, List* enemy_list){
 					continue;
 				}
 			}
-			cout << "Please, select a card to use" << endl;
+			cout << "Please, \033[34mselect a card\033[0m to use" << endl;
 			cin >> int_play;
 			Card* select_card = your_cards_on_field->SearchCard(int_play);
 			if(select_card->getName() == invalid){
@@ -236,19 +244,19 @@ void Playing(List* your_list, List* enemy_list){
 				continue;
 			}
 			if(select_card->getType() == "Boss"){
-				cout << "You selected the \033[95m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[95m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Infantary"){
-				cout << "You selected the \033[93m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[93m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Mage"){
-				cout << "You selected the \033[34m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[34m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Tech"){
-				cout << "You selected the \033[91m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[91m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Tank"){
-				cout << "You selected the \033[37m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[37m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Medic"){
-				cout << "You selected the \033[96m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[96m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}else if(select_card->getType() == "Ranger"){
-				cout << "You selected the \033[92m" << select_card->getType() << " " << select_card->getName() << "\033[0m, what do you want to do?" << endl;
+				cout << "You selected the \033[92m" << select_card->getType() << " " << select_card->getName() << "\033[0m" << endl;
 			}
 			if(select_card->getCooldown() <= 0){
 				cout << "(1) Use the Special Hability" << endl;
@@ -267,17 +275,33 @@ void Playing(List* your_list, List* enemy_list){
 						cout << "Battleon(2 rounds): attack 2 times." << endl;
 						Infantary* infantary = (Infantary*)select_card;
 						for(int i=0; i<2; i++){
-							cout << "Select a enemy to attack" << endl;
+							cout << "Select a \033[91menemy\033[0m to attack" << endl;
 							cin >> int_play;
 							int decreasemage = enemy_cards_on_field->MagePassive();
 							int increaseboss = your_cards_on_field->BossPassive();
 							int infantarypassive = infantary->getDetermination() * (infantary->getStrength()/10);
 							Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
-							cout << "You selected the \033[95m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							if(enemy_select_card->getType() == "Boss"){
+								cout << "You selected the \033[95m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Infantary"){
+								cout << "You selected the \033[93m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Mage"){
+								cout << "You selected the \033[34m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Tech"){
+								cout << "You selected the \033[91m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Tank"){
+								cout << "You selected the \033[37m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Medic"){
+								cout << "You selected the \033[96m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}else if(enemy_select_card->getType() == "Ranger"){
+								cout << "You selected the \033[92m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+							}
 
 							int infantary_damage = select_card->getStrength() - decreasemage + increaseboss + infantarypassive;
 
-							enemy_cards_on_field->Attack(int_play, infantary_damage);
+							if(enemy_cards_on_field->Attack(int_play, infantary_damage)){
+								cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
+							}
 						}
 					}else if(select_card->getType() == "Mage"){
 						cout << "SpellWave(3 rounds): manipulate a enemy, depending of sanity of the enemy(10*Sanity - 60%)" << endl;
@@ -291,7 +315,7 @@ void Playing(List* your_list, List* enemy_list){
 						cout << "Ragnarok(2 rounds): Select a enemy to give a explosed shot(Accuracy * 20% Strength)." << endl;
 					}
 				}else if(int_play == 2){
-				
+					cout << "Select a \033[91menemy\033[0m to attack" << endl;
 				}else{
 					cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
 					cout << "Press a button to restore your intelligence" << endl;
@@ -299,11 +323,56 @@ void Playing(List* your_list, List* enemy_list){
 					continue;
 				}
 			}else{
-				cout << "(1) Select a enemy to attack" << endl;
-				cin >> int_play;
+				cout << "Select a \033[91menemy\033[0m to attack" << endl;
 			}
+			cin >> int_play;
+			bool advantage = false;
+			Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
+			if(enemy_select_card->getType() == "Boss"){
+				cout << "You selected the \033[95m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+			}else if(enemy_select_card->getType() == "Infantary"){
+				cout << "You selected the \033[93m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() == "Boss" || select_card->getType() == "Mage" || select_card->getType() == "Ranger"){
+					advantage = true;
+				}
+			}else if(enemy_select_card->getType() == "Mage"){
+				cout << "You selected the \033[34m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() == "Boss" || select_card->getType() == "Tank" || select_card->getType() == "Ranger"){
+					advantage = true;
+				}
+			}else if(enemy_select_card->getType() == "Tech"){
+				cout << "You selected the \033[91m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() == "Boss" || select_card->getType() == "Infantary" || select_card->getType() == "Mage"){
+					advantage = true;
+				}
+			}else if(enemy_select_card->getType() == "Tank"){
+				cout << "You selected the \033[37m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() == "Boss" || select_card->getType() == "Tech"){
+					advantage = true;
+				}
+			}else if(enemy_select_card->getType() == "Medic"){
+				cout << "You selected the \033[96m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() != "Tank" || select_card->getType() != "Medic"){
+					advantage = true;
+				}
+			}else if(enemy_select_card->getType() == "Ranger"){
+				cout << "You selected the \033[92m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+				if(select_card->getType() != "Medic" || select_card->getType() != "Ranger"){
+					advantage = true;
+				}
+			}
+			int decreasemage = enemy_cards_on_field->MagePassive();
+			int increaseboss = your_cards_on_field->BossPassive();
+			int you_damage = select_card->getStrength() - decreasemage + increaseboss;
+			if(advantage){
+				you_damage *= 1.5;
+			}
+			if(enemy_cards_on_field->Attack(int_play, you_damage)){
+				cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
+			}
+
 		}
-	cout << "\nPress some button to continue" << endl;
+	cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 	cin >> the_play;
 	}
 	if(your_list->getQuantity() == 0){
@@ -361,7 +430,7 @@ void ClassTable(){
 	system("clear");
 	cout << "\033[96m-=-=-=-=-=-=-=-= Hello player, welcome to the ClassTable! =-=-=-=-=-=-=-=-\033[0m\n" << endl;
 	cout << "This is the ClassTable, the color represts if a class have advantage over another, \033[42mGreen = yes\033[0m, \033[101mRed = no\033[0m" << endl;
-
+	cout << "If a class have advantage over another, the damage is increased by 1/2" << endl;
 	cout << "+-----------+----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
 	cout << "|           |   \033[95mBoss\033[0m   | \033[93mInfantary\033[0m |   \033[34mMage\033[0m    |   \033[91mTech\033[0m    |   \033[37mTank\033[0m    |   \033[96mMedic\033[0m   |  \033[92mRanger\033[0m   |" << endl;
 	cout << "+-----------+----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;

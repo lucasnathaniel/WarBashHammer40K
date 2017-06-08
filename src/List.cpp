@@ -182,7 +182,7 @@ void List::RemoveCard(int indice){
 	delete run;
 	this->Quantity--;
 }
-void List::Attack(int target, int damage){
+bool List::Attack(int target, int damage){
     Card* card = First;
     int i =1;
     for(int i = 1; i < target; i++){
@@ -190,10 +190,10 @@ void List::Attack(int target, int damage){
     }
     card->setLife(card->getLife() - damage);
     if(card->getLife() <=0){
-        Card* nextdied = card->getNext();
         RemoveCard(i);
-        card = nextdied;
+        return true;
     }
+    return false;
 }
 void List::BossTremmor(int damage){
     Card* card = First;
