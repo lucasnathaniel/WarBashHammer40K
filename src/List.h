@@ -21,14 +21,20 @@ class List{
 		Card* First;
 	public:
 		List();
-    	~List();
-    	Card* getFirst();
-      	int getQuantity();
-    	void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
-    	void Insert(Card* new_card);
-      	void PrintList();
-      	Card* SearchCard(int indice);
-      	void RemoveCard(int indice);
+    ~List();
+    Card* getFirst();
+    int getQuantity();
+    void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
+    void Insert(Card* new_card);
+    void PrintList();
+    Card* SearchCard(int indice);
+    void RemoveCard(int indice);
+    void Attack(int target, int damage);
+    void BossTremmor(int damage);
+    int MagePassive();
+    int RangerPassive();
+    int BossPassive();
+    void ReduceCds();
 };
 
 #endif

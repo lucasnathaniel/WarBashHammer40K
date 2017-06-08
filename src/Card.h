@@ -19,10 +19,11 @@ class Card{
 		int Life;
 		int Strength;
 		int Sanity;
+		int Cooldown;
 		Card* Next;
 
 	public:
-		Card(string Type, string Name, int Life, int Strength, int Sanity);
+		Card(string Type, string Name, int Life, int Strength, int Sanity, int Cooldown);
 		Card();
 		~Card();
 		void setType(string Type);
@@ -35,6 +36,8 @@ class Card{
 		int getStrength();
 		void setSanity(int Sanity);
 		int getSanity();
+		void setCooldown(int Cooldown);
+		int getCooldown();
 		void setNext(Card* book);
 		Card* getNext();
 

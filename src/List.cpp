@@ -182,3 +182,63 @@ void List::RemoveCard(int indice){
 	delete run;
 	this->Quantity--;
 }
+void List::Attack(int target, int damage){
+    Card* card = First;
+    int i =1;
+    for(int i = 1; i < target; i++){
+        card = card->getNext();
+    }
+    card->setLife(card->getLife() - damage);
+    if(card->getLife() <=0){
+        Card* nextdied = card->getNext();
+        RemoveCard(i);
+        card = nextdied;
+    }
+}
+void List::BossTremmor(int damage){
+    Card* card = First;
+    for(int i = 1; i < this->Quantity; i++){
+        card->setLife(card->getLife() - damage);
+        if(card->getLife() <=0){
+            Card* nextdied = card->getNext();
+            RemoveCard(i);
+            card = nextdied;
+        }
+    }
+}
+
+int List::MagePassive(){
+    
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getType() == "Mage"){
+            Mage* mage = (Mage*)card;
+            return mage->getIntelligence() * 10;
+        }
+    }
+    return 0;
+}
+int List::RangerPassive(){
+    int damage = 0;
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getType() == "Ranger"){
+            Ranger* ranger = (Ranger*)card;
+            damage += ranger->getAccuracy() * (ranger->getStrength()/10);
+        }
+    }
+    return damage;
+}
+int List::BossPassive(){
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getType() == "Boss"){
+            Boss* boss = (Boss*)card;
+            return boss->getFury() * (boss->getStrength()/20);
+        }
+    }
+    return 0;
+}
+
+void List::ReduceCds(){
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        card->setCooldown(card->getCooldown()-1);
+    }
+}
