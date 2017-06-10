@@ -29,7 +29,7 @@ class List{
     void PrintList();
     Card* SearchCard(int indice);
     void RemoveCard(int indice);
-    bool Attack(int target, int damage);
+    int Attack(int target, int damage);
     void BossTremmor(int damage);
     int MagePassive();
     int RangerPassive();

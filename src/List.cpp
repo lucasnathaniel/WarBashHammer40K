@@ -179,21 +179,20 @@ void List::RemoveCard(int indice){
 		run = run_before->getNext();
 	}
 	run_before->setNext(run->getNext());
-	delete run;
+    delete run;
 	this->Quantity--;
 }
-bool List::Attack(int target, int damage){
+int List::Attack(int target, int damage){
     Card* card = First;
-    int i =1;
+    int i = 1;
     for(int i = 1; i < target; i++){
         card = card->getNext();
     }
     card->setLife(card->getLife() - damage);
     if(card->getLife() <=0){
-        RemoveCard(i);
-        return true;
+        return i;
     }
-    return false;
+    return -1;
 }
 void List::BossTremmor(int damage){
     Card* card = First;
