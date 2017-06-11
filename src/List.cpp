@@ -144,6 +144,9 @@ void List::PrintList(){
       }
     i++;
     cout << "\033[0m" << endl;
+    if(card->getNext() == card){
+        return;    
+    }
     }
 }
 

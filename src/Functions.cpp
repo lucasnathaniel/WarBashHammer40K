@@ -269,7 +269,7 @@ void Playing(List* your_list, List* enemy_list){
 								int tremmor_damage = (boss->getFury() * boss->getStrength()/10) - decreasemage;
 								
 								enemy_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
-	
+								select_card->setCooldown(3);
 							}else if(select_card->getType() == "Infantary"){
 								cout << "Battleon(2 rounds): attack 2 times." << endl;
 								Infantary* infantary = (Infantary*)select_card;
@@ -292,6 +292,7 @@ void Playing(List* your_list, List* enemy_list){
 										enemy_cards_on_field->RemoveCard(int_play);
 										cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 										cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+										enemy_count_field--;
 										cin >> the_play;
 										system("clear");
 										GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -304,18 +305,141 @@ void Playing(List* your_list, List* enemy_list){
 									}
 	
 								}
+								select_card->setCooldown(2);
 							}else if(select_card->getType() == "Mage"){
 								cout << "SpellWave(3 rounds): manipulate a enemy, depending of sanity of the enemy(10*Sanity - 60%)" << endl;
+								cout << "Select a \033[91menemy\033[0m to manipulate" << endl;
+								cin >> int_play;
+								Card* select_card_to_manipulate = enemy_cards_on_field->SearchCard(int_play);
+								int rand_mani = (rand() % 100) + 1;
+								if(rand_mani <= 60-10*select_card_to_manipulate->getSanity()){
+									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_manipulate);
+									enemy_count_field--;
+									you_count_field++;
+									enemy_cards_on_field->RemoveCard(int_play);
+									cout << "You're the mage!" << endl;
+								}else{
+									cout << "you should to study more :/" << endl;
+								}
+								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+								cin >> the_play;
+								select_card->setCooldown(3);
 							}else if(select_card->getType() == "Tech"){
 								cout << "Hacker(3 rounds): manipulate a enemy, depending of her (Hability * 5%)" << endl;
+								cout << "Select a \033[91menemy\033[0m to H4CK" << endl;
+								cin >> int_play;
+								Card* select_card_to_hack = enemy_cards_on_field->SearchCard(int_play);
+								int rand_hack = (rand() % 100) + 1;
+								Tech* tech = (Tech*)select_card;
+								if(rand_hack <= tech->getHability() * 5){
+									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_hack);
+									enemy_count_field--;
+									you_count_field++;
+									enemy_cards_on_field->RemoveCard(int_play);
+									cout << "H4CK3D!" << endl;
+								}else{
+									cout << "Hack FAIL :/" << endl;
+								}
+								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+								cin >> the_play;
+								select_card->setCooldown(3);
 							}else if(select_card->getType() == "Tank"){
 								cout << "Mountain(2 rounds): Select a ally to block your next damage" << endl;
+								cout << "Select a ally to TANK!" << endl;
+								cin >> int_play;
+								Card* select_card_to_tank = your_cards_on_field->SearchCard(int_play);
+								select_card_to_tank->setTanked(true);
+								cout << "You're tanking your ally " << select_card_to_tank->getName() << endl;
+								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+								cin >> the_play;
+								select_card->setCooldown(2);
 							}else if(select_card->getType() == "Medic"){
-								cout << "Sunshine(2 round): heal fully a ally." << endl;
+								cout << "Sunshine(2 round): Heal and give +500 HP for a ally." << endl;
+								cout << "Select a ally to heal!" << endl;
+								cin >> int_play;
+								Card* select_card_to_heal = your_cards_on_field->SearchCard(int_play);
+								select_card_to_heal->setLife(select_card_to_heal->getLife()+500);
+								cout << "The life of the " << select_card_to_heal->getName() << " is now " << select_card_to_heal->getLife() << endl;
+								select_card->setCooldown(2);
+								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+								cin >> the_play;
 							}else if(select_card->getType() == "Ranger"){
-								cout << "Ragnarok(2 rounds): Select a enemy to give a explosed shot(Accuracy * 20% Strength)." << endl;
+								cout << "Ragnarok(2 rounds): Select a enemy to give a critic shot(200% damage(25% chance))." << endl;
+								cout << "Select a \033[91menemy\033[0m to attack" << endl;
+								cin >> int_play;
+								bool advantage = false;
+								Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
+								if(enemy_select_card == nullptr){
+									cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+									cout << "Press a button to restore your intelligence" << endl;
+									cin >> the_play;
+									continue;
+								}
+								if(enemy_select_card->getType() == "Boss"){
+									cout << "You selected the \033[95m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+								}else if(enemy_select_card->getType() == "Infantary"){
+									cout << "You selected the \033[93m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() == "Boss" || select_card->getType() == "Mage" || select_card->getType() == "Ranger"){
+										advantage = true;
+									}
+								}else if(enemy_select_card->getType() == "Mage"){
+									cout << "You selected the \033[34m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() == "Boss" || select_card->getType() == "Tank" || select_card->getType() == "Ranger"){
+										advantage = true;
+									}
+								}else if(enemy_select_card->getType() == "Tech"){
+									cout << "You selected the \033[91m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() == "Boss" || select_card->getType() == "Infantary" || select_card->getType() == "Mage"){
+										advantage = true;
+									}
+								}else if(enemy_select_card->getType() == "Tank"){
+									cout << "You selected the \033[37m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() == "Boss" || select_card->getType() == "Tech"){
+										advantage = true;
+									}
+								}else if(enemy_select_card->getType() == "Medic"){
+									cout << "You selected the \033[96m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() != "Tank" || select_card->getType() != "Medic"){
+										advantage = true;
+									}
+								}else if(enemy_select_card->getType() == "Ranger"){
+									cout << "You selected the \033[92m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+									if(select_card->getType() != "Medic" || select_card->getType() != "Ranger"){
+										advantage = true;
+									}
+								}
+								int decreasemage = enemy_cards_on_field->MagePassive();
+								int increaseboss = your_cards_on_field->BossPassive();
+								int you_damage = select_card->getStrength() - decreasemage + increaseboss;
+								if(advantage){
+									you_damage *= 1.5;
+								}
+								int critic_shot = (rand() % 12) + 1;
+								if(critic_shot <= 4){
+									you_damage *=2;
+								}
+								int enemy_to_eleminate = enemy_cards_on_field->Attack(int_play, you_damage);
+								if(enemy_to_eleminate != -1){
+									enemy_cards_on_field->RemoveCard(int_play);
+									cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
+									cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+									enemy_count_field--;
+									cin >> the_play;
+									system("clear");
+									GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+								}else{
+									cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m TOOK \033[1;93;13m"<< you_damage <<  "\033[1;93;91m DAMAGE  BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
+									cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+									cin >> the_play;
+									system("clear");
+									GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+								}
+								select_card->setCooldown(2);
 							}
-						}else if(int_play == 2){
+						cout << "Please, \033[34mselect a card\033[0m to use" << endl;
+						cin >> int_play;
+						}
+						else if(int_play == 2){
 							cout << "Select a \033[91menemy\033[0m to attack" << endl;
 						}else{
 							cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
@@ -333,6 +457,11 @@ void Playing(List* your_list, List* enemy_list){
 						cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
+						continue;
+					}
+					if(enemy_select_card->getTanked() == true){
+						cout << "You broken the enemy block!" << endl;
+						enemy_select_card->setTanked(false);
 						continue;
 					}
 					if(enemy_select_card->getType() == "Boss"){
@@ -379,6 +508,7 @@ void Playing(List* your_list, List* enemy_list){
 						enemy_cards_on_field->RemoveCard(int_play);
 						cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+						enemy_count_field--;
 						cin >> the_play;
 						system("clear");
 						GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -496,7 +626,7 @@ void ClassTable(){
 	cout << "\033[93mInfantary\033[0m: increase her attack + (Determination * 10% Strength)" << endl;
 	cout << "\033[34mMage\033[0m     : all enemys take the (Intelligence * 10), increase defense of all allys (Intelligence * 10)." << endl;
 	cout << "\033[91mTech\033[0m     : the player can play again." << endl;
-	cout << "\033[37mTank\033[0m     : block (Hardness) attacks." << endl;
+	cout << "\033[37mTank\033[0m     : block the first attack." << endl;
 	cout << "\033[96mMedic\033[0m    : cure all allys in (Cure * 20)." << endl;
 	cout << "\033[92mRanger\033[0m   : when a enemy enter on the field, he's attacked with (Accuracy * 10% Strength)." << endl;
 	cout << "\n\033[1mActives:\n" << endl;
@@ -505,8 +635,8 @@ void ClassTable(){
 	cout << "\033[34mMage\033[0m     : SpellWave(3 rounds): manipulate a enemy, depending of sanity of the enemy(10*Sanity - 60%)" << endl;
 	cout << "\033[91mTech\033[0m     : Hacker(3 rounds): manipulate a enemy, depending of her (Hability * 5%)" << endl;
 	cout << "\033[37mTank\033[0m     : Mountain(2 rounds): Select a ally to block your next damage" << endl;
-	cout << "\033[96mMedic\033[0m    : Sunshine(2 round): heal fully a ally." << endl;
-	cout << "\033[92mRanger\033[0m   : Ragnarok(2 rounds): Select a enemy to give a explosed shot(Accuracy * 20% Strength)." << endl;
+	cout << "\033[96mMedic\033[0m    : Sunshine(2 round): Heal and give +500 HP for a ally." << endl;
+	cout << "\033[92mRanger\033[0m   : Ragnarok(2 rounds): Select a enemy to give a critic shot(200% damage(25% chance))." << endl;
 }
 
 void AboutRaces(){

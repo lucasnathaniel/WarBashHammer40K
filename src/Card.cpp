@@ -6,8 +6,9 @@
 /**
   *@brief Construtor com parâmetros
   */
-Card::Card(string type, string name, int life, int strength, int sanity, int cooldown){
+Card::Card(string type, string name, int life, int strength, int sanity, int cooldown, bool tanked){
   this->setNext(nullptr);
+  this->setTanked(false);
 }
 Card::Card(){
 	this->setNext(nullptr);
@@ -57,6 +58,12 @@ void Card::setCooldown(int Cooldown){
 int Card::getCooldown(){
   return this->Cooldown;
 }
+void Card::setTanked(bool Tanked){
+  this->Tanked = Tanked;
+}
+bool Card::getTanked(){
+  return this->Tanked;
+}
 /**
   *@brief Setter Next
   */
@@ -79,6 +86,7 @@ Boss::Boss(string type, string name, int life, int strength, int sanity, int fur
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(3);
+  this->setTanked(false);
   this->setFury(fury);
 }
 
@@ -97,6 +105,7 @@ Infantary::Infantary(string type, string name, int life, int strength, int sanit
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(2);
+  this->setTanked(false);
   this->setDetermination(determination);
 }
 
@@ -115,6 +124,7 @@ Mage::Mage(string type, string name, int life, int strength, int sanity, int int
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(3);
+  this->setTanked(false);
   this->setIntelligence(intelligence);
 }
 void Mage::setIntelligence(int intelligence){
@@ -131,6 +141,7 @@ Tech::Tech(string type, string name, int life, int strength, int sanity, int hab
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(3);
+  this->setTanked(false);
   this->setHability(hability);
 }
 void Tech::setHability(int hability){
@@ -147,6 +158,7 @@ Tank::Tank(string type, string name, int life, int strength, int sanity, int har
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(2);
+  this->setTanked(true);
   this->setHardness(hardness);
 }
 void Tank::setHardness(int hardness){
@@ -163,6 +175,7 @@ Medic::Medic(string type, string name, int life, int strength, int sanity, int c
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(2);
+  this->setTanked(false);
   this->setCure(cure);
 }
 void Medic::setCure(int cure){
@@ -179,6 +192,7 @@ Ranger::Ranger(string type, string name, int life, int strength, int sanity, int
   this->setStrength(strength);
   this->setSanity(sanity);
   this->setCooldown(2);
+  this->setTanked(false);
   this->setAccuracy(accuracy);
 }
 void Ranger::setAccuracy(int accuracy){
