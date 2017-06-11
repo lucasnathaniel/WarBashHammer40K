@@ -211,13 +211,14 @@ void List::BossTremmor(int damage){
 
 int List::MagePassive(){
     
+    int damage = 0;
     for(Card* card = First; card != NULL; card = card->getNext()){
         if(card->getType() == "Mage"){
             Mage* mage = (Mage*)card;
-            return mage->getIntelligence() * 10;
+            damage += mage->getIntelligence() * 10;
         }
     }
-    return 0;
+    return damage;
 }
 int List::RangerPassive(){
     int damage = 0;
@@ -228,6 +229,29 @@ int List::RangerPassive(){
         }
     }
     return damage;
+}
+int List::MedicPassive(){
+    int cure = 0;
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getType() == "Medic"){
+            Medic* medic = (Medic*)card;
+            cure += medic->getCure() * 20;
+        }
+    }
+    return cure;
+}
+
+void List::MedicSunshine(int medic_cure){
+    Card* card = First;
+    for(int i = 1; i < this->Quantity; i++){
+        card->setLife(card->getLife() + medic_cure);
+    }
+}
+void List::MageSpell(int mage_damage){
+    Card* card = First;
+    for(int i = 1; i < this->Quantity; i++){
+        card->setLife(card->getLife() - mage_damage);
+    }
 }
 int List::BossPassive(){
     for(Card* card = First; card != NULL; card = card->getNext()){

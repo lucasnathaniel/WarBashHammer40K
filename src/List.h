@@ -33,6 +33,9 @@ class List{
     void BossTremmor(int damage);
     int MagePassive();
     int RangerPassive();
+    int MedicPassive();
+    void MedicSunshine(int medic_cure);
+    void MageSpell(int mage_damage);
     int BossPassive();
     void ReduceCds();
 };

@@ -116,11 +116,6 @@ void Playing(List* your_list, List* enemy_list){
 		if((your_list->getQuantity() == 0 && your_cards_on_field == 0)|| (enemy_list->getQuantity() == 0 && enemy_cards_on_field == 0)){
 			break;
 		}
-		//Reduce cds
-		your_cards_on_field->ReduceCds();
-		enemy_cards_on_field->ReduceCds();
-
-		//end --cds
 
 		//Enemy play
 		if(enemy_list->getQuantity() !=0){ // Inimigo coloca carta aleatoria
@@ -129,6 +124,11 @@ void Playing(List* your_list, List* enemy_list){
 			if(put_card->getType() == "Boss" && enemy_can_put_boss > 0){ // if the enemy try put a boss without lost 3 cards
 				continue;
 			}
+			//Reduce cds
+			your_cards_on_field->ReduceCds();
+			enemy_cards_on_field->ReduceCds();
+			//end --cds
+			
 			//you range passive damage
 			int enemy_range_damage = your_cards_on_field->RangerPassive();
 			bool if_died_by_rangers = false;
@@ -155,6 +155,16 @@ void Playing(List* your_list, List* enemy_list){
 		//End of enemy play
 		cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 		cin >> the_play;
+		int medic_cure = your_cards_on_field->MedicPassive();
+		int mage_passive = your_cards_on_field->MagePassive();
+		your_cards_on_field->MedicSunshine(medic_cure);
+		your_cards_on_field->MageSpell(mage_passive);
+		if(medic_cure != 0){
+			cout << "\033[96mYour cards received +" << medic_cure << " of your medic!\033[0m" << endl;
+		}
+		if(mage_passive != 0){
+			cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
+		}
 		GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 		//Your play
 		bool puted = false; //var to verif if puted
@@ -293,6 +303,7 @@ void Playing(List* your_list, List* enemy_list){
 										cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 										cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 										enemy_count_field--;
+										enemy_can_put_boss++;
 										cin >> the_play;
 										system("clear");
 										GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -316,6 +327,7 @@ void Playing(List* your_list, List* enemy_list){
 									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_manipulate);
 									enemy_count_field--;
 									you_count_field++;
+									enemy_can_put_boss++;
 									enemy_cards_on_field->RemoveCard(int_play);
 									cout << "You're the mage!" << endl;
 								}else{
@@ -334,6 +346,7 @@ void Playing(List* your_list, List* enemy_list){
 								if(rand_hack <= tech->getHability() * 5){
 									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_hack);
 									enemy_count_field--;
+									enemy_can_put_boss++;
 									you_count_field++;
 									enemy_cards_on_field->RemoveCard(int_play);
 									cout << "H4CK3D!" << endl;
@@ -424,6 +437,7 @@ void Playing(List* your_list, List* enemy_list){
 									cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 									cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 									enemy_count_field--;
+									enemy_can_put_boss++;
 									cin >> the_play;
 									system("clear");
 									GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -509,6 +523,7 @@ void Playing(List* your_list, List* enemy_list){
 						cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 						enemy_count_field--;
+						enemy_can_put_boss++;
 						cin >> the_play;
 						system("clear");
 						GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -624,10 +639,10 @@ void ClassTable(){
 	cout << "\n\033[1mPassives:\n" << endl;
 	cout << "\033[95mBoss\033[0m     : increase all allys attack + (Fury * 5% Strength)" << endl;
 	cout << "\033[93mInfantary\033[0m: increase her attack + (Determination * 10% Strength)" << endl;
-	cout << "\033[34mMage\033[0m     : all enemys take the (Intelligence * 10), increase defense of all allys (Intelligence * 10)." << endl;
+	cout << "\033[34mMage\033[0m     : all enemys take the when the round's player started(Intelligence * 10), increase defense of all allys (Intelligence * 10)." << endl;
 	cout << "\033[91mTech\033[0m     : the player can play again." << endl;
 	cout << "\033[37mTank\033[0m     : block the first attack." << endl;
-	cout << "\033[96mMedic\033[0m    : cure all allys in (Cure * 20)." << endl;
+	cout << "\033[96mMedic\033[0m    : cure all allys in (Cure * 20) when the round's player started." << endl;
 	cout << "\033[92mRanger\033[0m   : when a enemy enter on the field, he's attacked with (Accuracy * 10% Strength)." << endl;
 	cout << "\n\033[1mActives:\n" << endl;
 	cout << "\033[95mBoss\033[0m     : Tremmor(3 rounds): attack all enemys with her (Fury * 10% Strength)." << endl;
