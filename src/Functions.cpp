@@ -107,6 +107,7 @@ void Playing(List* your_list, List* enemy_list){
 	int you_count_field=0, enemy_count_field=0;
 	char the_play;
 	int int_play;
+	bool retry;
 	int you_can_put_boss = 3; //when this is 0, you can put boss, this decrease when you lost a card
 	int enemy_can_put_boss = 3; // /\ for enemy
 	List* your_cards_on_field = new List();
@@ -114,18 +115,46 @@ void Playing(List* your_list, List* enemy_list){
 	while(1){
 		system("clear");
 		cout << "Cards on your hand: " << your_list->getQuantity() << "Cards on your field: " << your_cards_on_field->getQuantity() << endl;
-		if((your_list->getQuantity() == 0 && your_cards_on_field == 0)|| (enemy_list->getQuantity() == 0 && enemy_cards_on_field == 0)){
+		if((your_list->getQuantity() == 0 && your_cards_on_field == 0) || (enemy_list->getQuantity() == 0 && enemy_cards_on_field == 0)){
 			break;
 		}
 
 		//Enemy play
+		if(retry){
+			int medic_cure = enemy_cards_on_field->MedicPassive();
+			enemy_cards_on_field->MedicSunshine(medic_cure);
+			if(medic_cure != 0){
+				cout << "\033[96mEnemy cards received +" << medic_cure << " of enemy medic!\033[0m" << endl;
+			}
+			if(enemy_count_field != 0){
+				int mage_passive = your_cards_on_field->MagePassive();
+				vector<int> vector_to_remove = enemy_cards_on_field->MageSpell(mage_passive);
+				int vector_size = vector_to_remove.size();
+				if(vector_size != 0){
+					enemy_count_field-= vector_size;
+					enemy_can_put_boss-= vector_size;
+					cout << "\033[91mEnemy cards received -" << mage_passive << " of the your Mage(s)!\033[0m" << endl;
+					for(int elements_to_remove = 0; elements_to_remove < vector_size-1; elements_to_remove++){
+						enemy_cards_on_field->RemoveCard(elements_to_remove);
+					}
+				}
+			}
+			GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+			cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+			cin >> the_play;
+			system("clear");
+		}
+		
 		bool bool_puted = false;
-		if(enemy_list->getQuantity() !=0){ // Inimigo coloca carta aleatoria
+		bool if_died_by_rangers = false;
+		if(enemy_list->getQuantity() != 0){ // Inimigo coloca carta aleatoria
 			int random = (rand() % enemy_list->getQuantity()) + 1;
 			Card* put_card = enemy_list->SearchCard(random);
-			if(put_card->getType() == "Boss" && enemy_can_put_boss > 0){ // if the enemy try put a boss without lost 3 cards
+			if(put_card->getType() == "Boss" && enemy_can_put_boss > 0 && enemy_list->getQuantity() > 1){ // if the enemy try put a boss without lost 3 cards
+				retry = false;
 				continue;
 			}
+			retry = true;
 			//Reduce cds
 			your_cards_on_field->ReduceCds();
 			enemy_cards_on_field->ReduceCds();
@@ -133,10 +162,9 @@ void Playing(List* your_list, List* enemy_list){
 
 			//you range passive damage
 			int enemy_range_damage = your_cards_on_field->RangerPassive();
-			bool if_died_by_rangers = false;
 			if(enemy_range_damage != 0){
 				put_card->setLife(put_card->getLife() - enemy_range_damage);
-				cout << "The card that the \033[91menemy\033[0m will to place, will to took \033[91m" << enemy_range_damage << "\033[0m damage, because have rangers(s) on you side" << endl;
+				cout << "The card that the \033[91menemy\033[0m will to place, will to took \033[91m" << enemy_range_damage << "\033[0m damage, because have ranger(s) on you side" << endl;
 				if(put_card->getLife() <= 0){
 					cout << "\033[1;93;91mTHE \033[1;93;13m" << put_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13mRANGERS\033[0;0;0m"<< endl;
 					if_died_by_rangers = true;
@@ -156,7 +184,9 @@ void Playing(List* your_list, List* enemy_list){
 			bool_puted = true;
 		}
 		for(int cards_to_use = 1; cards_to_use <= you_count_field; cards_to_use++){
-			
+			if(if_died_by_rangers){
+				break;
+			}
 			if(bool_puted && cards_to_use == enemy_count_field){ // if the enemy puted and the card that he will to use is your last card(the card that he puted), he cant play
 				break;
 			}
@@ -450,10 +480,15 @@ void Playing(List* your_list, List* enemy_list){
 		}
 		if(you_count_field != 0){
 			int mage_passive = enemy_cards_on_field->MagePassive();
-			your_cards_on_field->MageSpell(mage_passive);
-			if(mage_passive != 0){
-				
+			vector<int> vector_to_remove = your_cards_on_field->MageSpell(mage_passive);
+			int vector_size = vector_to_remove.size();
+			if(vector_size != 0){
+				you_count_field-= vector_size;
+				you_can_put_boss-= vector_size;
 				cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
+				for(int elements_to_remove = 0; elements_to_remove < vector_size-1; elements_to_remove++){
+					your_cards_on_field->RemoveCard(elements_to_remove);
+				}
 			}
 		}
 		GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -474,7 +509,7 @@ void Playing(List* your_list, List* enemy_list){
 				int range_damage = enemy_cards_on_field->RangerPassive();
 				if(range_damage != 0){
 					put_card->setLife(put_card->getLife() - range_damage);
-					cout << "the card that you placed, took " << range_damage << " damage, because have rangers(s) on the enemy side" << endl;
+					cout << "the card that you placed, took " << range_damage << " damage, because have ranger(s) on the enemy side" << endl;
 					cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 					cin >> the_play;
 				}
@@ -505,9 +540,9 @@ void Playing(List* your_list, List* enemy_list){
 					int range_damage = enemy_cards_on_field->RangerPassive();
 					if(range_damage != 0){
 						put_card->setLife(put_card->getLife() - range_damage);
-						cout << "the card that you placed, took " << range_damage << " damage, because have rangers(s) on the enemy side" << endl;
+						cout << "the card that you placed, took " << range_damage << " damage, because have ranger(s) on the enemy side" << endl;
 						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-					cin >> the_play;
+						cin >> the_play;
 					}
 					your_cards_on_field = PutACardOnField(your_list, your_cards_on_field, put_card);
 					puted = true;

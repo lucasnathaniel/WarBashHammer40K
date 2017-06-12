@@ -211,7 +211,17 @@ void List::BossTremmor(int damage){
 
 int List::RangerPassive(){
     int damage = 0;
+    if(Quantity == 1){
+    	if(First->getType() == "Ranger"){
+            Ranger* ranger = (Ranger*)First;
+            damage += ranger->getAccuracy() * (ranger->getStrength()/10);
+        	return damage;
+        }
+    }
     for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getNext() == card){
+        	return damage;
+        }
         if(card->getType() == "Ranger"){
             Ranger* ranger = (Ranger*)card;
             damage += ranger->getAccuracy() * (ranger->getStrength()/10);
@@ -268,10 +278,18 @@ int List::MagePassive(){
     return damage;
 }
 
-void List::MageSpell(int mage_damage){
+vector<int> List::MageSpell(int mage_damage){
+    vector<int> vector_elements_to_remove;
+    int i = 1;
     for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() - mage_damage);
+        if(card->getLife() <= 0){
+        	cout << "\033[1;93;91mTHE \033[1;93;13m" << card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13MAGE PASSIVE\033[0;0;0m"<< endl;
+        	vector_elements_to_remove.push_back(i);
+        }
+        i++;
     }
+    return vector_elements_to_remove;
 }
 int List::BossPassive(){
     for(Card* card = First; card != NULL; card = card->getNext()){

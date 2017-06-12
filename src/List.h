@@ -35,7 +35,7 @@ class List{
     	int MedicPassive();
     	void MedicSunshine(int medic_cure);
     	int MagePassive();
-    	void MageSpell(int mage_damage);
+    	vector<int> MageSpell(int mage_damage);
     	int BossPassive();
     	void ReduceCds();
 };
