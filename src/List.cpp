@@ -230,6 +230,9 @@ int List::MedicPassive(){
         }
     }
     for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getNext() == card){
+        	return cure;
+        }
         if(card->getType() == "Medic"){
             Medic* medic = (Medic*)card;
             cure += medic->getCure() * 20;
@@ -254,6 +257,9 @@ int List::MagePassive(){
         }
     }
     for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getNext() == card){
+        	return damage;
+        }
         if(card->getType() == "Mage"){
             Mage* mage = (Mage*)card;
             damage += mage->getIntelligence() * 10;
@@ -280,5 +286,8 @@ int List::BossPassive(){
 void List::ReduceCds(){
     for(Card* card = First; card != NULL; card = card->getNext()){
         card->setCooldown(card->getCooldown()-1);
+        if(card->getNext() == card){
+        	return;
+        }
     }
 }

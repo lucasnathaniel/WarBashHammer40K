@@ -113,11 +113,13 @@ void Playing(List* your_list, List* enemy_list){
 	List* enemy_cards_on_field = new List();
 	while(1){
 		system("clear");
+		cout << "Cards on your hand: " << your_list->getQuantity() << "Cards on your field: " << your_cards_on_field->getQuantity() << endl;
 		if((your_list->getQuantity() == 0 && your_cards_on_field == 0)|| (enemy_list->getQuantity() == 0 && enemy_cards_on_field == 0)){
 			break;
 		}
 
 		//Enemy play
+		bool bool_puted = false;
 		if(enemy_list->getQuantity() !=0){ // Inimigo coloca carta aleatoria
 			int random = (rand() % enemy_list->getQuantity()) + 1;
 			Card* put_card = enemy_list->SearchCard(random);
@@ -151,9 +153,13 @@ void Playing(List* your_list, List* enemy_list){
 				PrintColor(enemy_type);
 				cout << enemy_type << " " << enemy_name << "\033[0m on the field" << endl;			
 			}
+			bool_puted = true;
 		}
-		
 		for(int cards_to_use = 1; cards_to_use <= you_count_field; cards_to_use++){
+			
+			if(bool_puted && cards_to_use == enemy_count_field){ // if the enemy puted and the card that he will to use is your last card(the card that he puted), he cant play
+				break;
+			}
 			if(you_count_field == 0){
 				cout << "you dont have more cards! xD" << endl;
 				break;
@@ -203,18 +209,12 @@ void Playing(List* your_list, List* enemy_list){
 							if(your_to_eleminate != -1){
 								your_cards_on_field->RemoveCard(int_play);
 								cout << "\033[1;93;91mTHE \033[1;93;13m" << your_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << enemy_select_card->getName() << "\033[0;0;0m"<< endl;
-								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 								you_count_field--;
 								you_can_put_boss--;
-								cin >> the_play;
-								system("clear");
-								GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+
 							}else{
 								cout << "\033[1;93;91mTHE \033[1;93;13m" << your_select_card->getName() << "\033[1;93;91m TOOK \033[1;93;13m"<< infantary_damage <<  "\033[1;93;91m DAMAGE BY \033[1;93;13m" << enemy_select_card->getName() << "\033[0;0;0m"<< endl;
-								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-								cin >> the_play;
-								system("clear");
-								GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+
 							}
 						}
 						enemy_select_card->setCooldown(2);
@@ -240,9 +240,8 @@ void Playing(List* your_list, List* enemy_list){
 						}else{
 							cout << "The mage enemy failed :|" << endl;
 						}
-						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-						cin >> the_play;
 						enemy_select_card->setCooldown(3);
+
 					}else if(enemy_select_card->getType() == "Tech"){
 						cout << "Hacker(3 rounds): manipulate a enemy, depending of her (Hability * 5%)" << endl;
 						int_play = (rand() % you_count_field) + 1;
@@ -262,28 +261,23 @@ void Playing(List* your_list, List* enemy_list){
 							you_can_put_boss--;
 							enemy_count_field++;
 							your_cards_on_field->RemoveCard(int_play);
-							cout << "You're Pwned!" << endl;
+							cout << "\033[91mYou're Pwned! Hahaha :)\033[0m" << endl;
 						}else{
 							cout << "You're luck :v" << endl;
 						}
-						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-						cin >> the_play;
 						enemy_select_card->setCooldown(3);
 					}else if(enemy_select_card->getType() == "Tank"){
 						cout << "Mountain(2 rounds): Select a ally to block your next damage" << endl;
 						int_play = (rand() % enemy_count_field) + 1;
 						Card* enemy_card_to_tank = enemy_cards_on_field->SearchCard(int_play);
 						enemy_card_to_tank->setTanked(true);
-						
 						cout << "The \033[91menemy\033[0m selected the ";
 						PrintColor(enemy_select_card->getType());
 						cout << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m to block the next hit for your ally ";
 						PrintColor(enemy_card_to_tank->getType());
 						cout << enemy_card_to_tank->getType() << " " << enemy_card_to_tank->getName() << "\033[0m" << endl;
-						
-						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-						cin >> the_play;
 						enemy_select_card->setCooldown(2);
+
 					}else if(enemy_select_card->getType() == "Medic"){
 						cout << "Sunshine(2 round): Heal and give +500 HP for a ally." << endl;
 						cout << "The \033[91menemy\033[0m will select a ally to heal!" << endl;
@@ -292,8 +286,7 @@ void Playing(List* your_list, List* enemy_list){
 						enemy_card_to_heal->setLife(enemy_card_to_heal->getLife()+500);
 						cout << "The life of the " << enemy_card_to_heal->getName() << " is now " << enemy_card_to_heal->getLife() << endl;
 						enemy_select_card->setCooldown(2);
-						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-						cin >> the_play;
+
 					}else if(enemy_select_card->getType() == "Ranger"){
 						cout << "Ragnarok(2 rounds): Select a enemy to give a critic shot(200% damage(25% chance))." << endl;
 						int_play = (rand() % you_count_field) + 1;
@@ -332,19 +325,16 @@ void Playing(List* your_list, List* enemy_list){
 							cout << "\033[1;93;91mTHE \033[1;93;13m" << your_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << enemy_select_card->getName() << "\033[0;0;0m"<< endl;
 							you_count_field--;
 							you_can_put_boss--;
-							cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-							cin >> the_play;
-							system("clear");
-							GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 						}else{
 							cout << "\033[1;93;91mTHE \033[1;93;13m" << your_select_card->getName() << "\033[1;93;91m TOOK \033[1;93;13m"<< enemy_damage <<  "\033[1;93;91m DAMAGE BY \033[1;93;13m" << enemy_select_card->getName() << "\033[0;0;0m"<< endl;
-							cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-							cin >> the_play;
-							system("clear");
-							GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
+							
 						}
 						enemy_select_card->setCooldown(2);
 					}
+					cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
+					cin >> the_play;
+					system("clear");
+					GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 					continue;
 				}
 				int_play = (rand() % you_count_field) + 1;
@@ -450,6 +440,9 @@ void Playing(List* your_list, List* enemy_list){
 		cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 		cin >> the_play;
 		system("clear");
+		if(you_can_put_boss > 0){
+			cout << "\033[95mRounds to you can put your boss:\033[0m " << you_can_put_boss << endl;
+		}
 		int medic_cure = your_cards_on_field->MedicPassive();
 		your_cards_on_field->MedicSunshine(medic_cure);
 		if(medic_cure != 0){
