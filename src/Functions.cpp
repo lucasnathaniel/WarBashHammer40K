@@ -134,7 +134,7 @@ void Playing(List* your_list, List* enemy_list){
 					enemy_count_field-= vector_size;
 					enemy_can_put_boss-= vector_size;
 					cout << "\033[91mEnemy cards received -" << mage_passive << " of the your Mage(s)!\033[0m" << endl;
-					for(int elements_to_remove = 0; elements_to_remove < vector_size-1; elements_to_remove++){
+					for(int elements_to_remove = 0; elements_to_remove < vector_size; elements_to_remove++){
 						enemy_cards_on_field->RemoveCard(elements_to_remove);
 					}
 				}
@@ -187,7 +187,7 @@ void Playing(List* your_list, List* enemy_list){
 			if(if_died_by_rangers){
 				break;
 			}
-			if(bool_puted && cards_to_use == enemy_count_field){ // if the enemy puted and the card that he will to use is your last card(the card that he puted), he cant play
+			if(bool_puted && cards_to_use == enemy_count_field){ // if the enemy puted and the card that he will to use is your last card(the card that he puted), he can't play
 				break;
 			}
 			if(you_count_field == 0){
@@ -486,7 +486,7 @@ void Playing(List* your_list, List* enemy_list){
 				you_count_field-= vector_size;
 				you_can_put_boss-= vector_size;
 				cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
-				for(int elements_to_remove = 0; elements_to_remove < vector_size-1; elements_to_remove++){
+				for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
 					your_cards_on_field->RemoveCard(elements_to_remove);
 				}
 			}
@@ -500,8 +500,8 @@ void Playing(List* your_list, List* enemy_list){
 			cin >> int_play;
 			Card* put_card = your_list->SearchCard(int_play);
 			if(put_card != nullptr){
-				if(you_can_put_boss > 0 && put_card->getType() == "Boss"){ // if you to want put the boss without lost 3 cards
-					cout << "\033[91mYou idiot, lost the turn(You cant put the boss now!)\033[0m" << endl;
+				if(you_can_put_boss > 0 && put_card->getType() == "Boss" && your_list->getQuantity() != 0){ // if you to want put the boss without lost 3 cards
+					cout << "\033[91mYou idiot, lost the turn(You can't put the boss now!)\033[0m" << endl;
 					cout << "Press a button to restore your intelligence" << endl;
 					cin >> the_play;
 					continue;
@@ -532,7 +532,7 @@ void Playing(List* your_list, List* enemy_list){
 				Card* put_card = your_list->SearchCard(int_play);
 				if(put_card != nullptr){
 					if(you_can_put_boss > 0 && put_card->getType() == "Boss"){ // if you to want put the boss without lost 3 cards
-						cout << "\033[91mYou idiot, lost the turn(you cant put the boss now!)\033[0m" << endl;
+						cout << "\033[91mYou idiot, lost the turn(you can't put the boss now!)\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
 						continue;
@@ -568,7 +568,7 @@ void Playing(List* your_list, List* enemy_list){
 					Card* select_card = your_cards_on_field->SearchCard(int_play);
 	
 					if(select_card->getName() == invalid){
-						cout << "\033[91mYou placed this card, cant use now, lost the round, idiot!\033[0m" << endl;
+						cout << "\033[91mYou placed this card, can't use now, lost the round, idiot!\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
 						continue;

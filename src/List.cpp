@@ -105,6 +105,11 @@ void List::Insert(Card* new_card){
     
     while(percorre->getNext() != NULL){
     	percorre = percorre->getNext();
+    	if(percorre->getNext() == percorre){
+    		percorre->setNext(card);
+    		this->Quantity++;
+    		return;
+    	}
     }
     percorre->setNext(card);
     this->Quantity++;
@@ -157,6 +162,9 @@ Card* List::SearchCard(int indice){
 	Card* card = First;
 	for(int i = 1; i < indice; i++){
 		card = card->getNext();
+		if(card->getNext() == card){
+			return card;
+		}
 	}
 	return card;
 }
@@ -252,8 +260,15 @@ int List::MedicPassive(){
 }
 
 void List::MedicSunshine(int medic_cure){
+    if(Quantity == 0){
+    	return;
+    }
+
     for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() + medic_cure);
+        if(card->getNext() == card){
+        	return;
+        }
     }
 }
 
@@ -284,10 +299,13 @@ vector<int> List::MageSpell(int mage_damage){
     for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() - mage_damage);
         if(card->getLife() <= 0){
-        	cout << "\033[1;93;91mTHE \033[1;93;13m" << card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13MAGE PASSIVE\033[0;0;0m"<< endl;
+        	cout << "\033[1;93;91mTHE \033[1;93;13m" << card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13mMAGE PASSIVE\033[0;0;0m"<< endl;
         	vector_elements_to_remove.push_back(i);
         }
         i++;
+        if(card->getNext() == card){
+        	return vector_elements_to_remove;
+        }
     }
     return vector_elements_to_remove;
 }
