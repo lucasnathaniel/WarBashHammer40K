@@ -128,7 +128,7 @@ void Playing(List* your_list, List* enemy_list){
 			your_cards_on_field->ReduceCds();
 			enemy_cards_on_field->ReduceCds();
 			//end --cds
-			
+
 			//you range passive damage
 			int enemy_range_damage = your_cards_on_field->RangerPassive();
 			bool if_died_by_rangers = false;
@@ -156,12 +156,12 @@ void Playing(List* your_list, List* enemy_list){
 		cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 		cin >> the_play;
 		int medic_cure = your_cards_on_field->MedicPassive();
-		int mage_passive = your_cards_on_field->MagePassive();
 		your_cards_on_field->MedicSunshine(medic_cure);
-		your_cards_on_field->MageSpell(mage_passive);
 		if(medic_cure != 0){
 			cout << "\033[96mYour cards received +" << medic_cure << " of your medic!\033[0m" << endl;
 		}
+		int mage_passive = enemy_cards_on_field->MagePassive();
+		your_cards_on_field->MageSpell(mage_passive);
 		if(mage_passive != 0){
 			cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
 		}
@@ -175,7 +175,7 @@ void Playing(List* your_list, List* enemy_list){
 			Card* put_card = your_list->SearchCard(int_play);
 			if(put_card != nullptr){
 				if(you_can_put_boss > 0 && put_card->getType() == "Boss"){ // if you to want put the boss without lost 3 cards
-					cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+					cout << "\033[91mYou idiot, lost the turn(You cant put the boss now!)\033[0m" << endl;
 					cout << "Press a button to restore your intelligence" << endl;
 					cin >> the_play;
 					continue;
@@ -193,7 +193,7 @@ void Playing(List* your_list, List* enemy_list){
 				GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 
 			}else{
-				cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+				cout << "\033[91mYou idiot, lost the turn(this card does not exist!)\033[0m" << endl;
 				cout << "Press a button to restore your intelligence" << endl;
 				cin >> the_play;
 			}
@@ -204,7 +204,7 @@ void Playing(List* your_list, List* enemy_list){
 				Card* put_card = your_list->SearchCard(int_play);
 				if(put_card != nullptr){
 					if(you_can_put_boss > 0 && put_card->getType() == "Boss"){ // if you to want put the boss without lost 3 cards
-						cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+						cout << "\033[91mYou idiot, lost the turn(you cant put the boss now!)\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
 						continue;
@@ -221,7 +221,7 @@ void Playing(List* your_list, List* enemy_list){
 					system("clear");
 					GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 				}else{
-					cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+					cout << "\033[91mYou idiot, lost the turn(this card does not exist!)\033[0m" << endl;
 					cout << "Press a button to restore your intelligence" << endl;
 					cin >> the_play;
 					continue;
@@ -232,8 +232,7 @@ void Playing(List* your_list, List* enemy_list){
 				if(enemy_count_field == 0){
 					cout << "Dont have more enemys :/" << endl;
 					break;
-				}
-				if(enemy_count_field != 0){
+				}else{
 					cout << "Please, \033[34mselect a card\033[0m to use" << endl;
 					cin >> int_play;
 					Card* select_card = your_cards_on_field->SearchCard(int_play);
@@ -245,13 +244,13 @@ void Playing(List* your_list, List* enemy_list){
 						continue;
 					}
 					if(int_play > you_count_field || int_play <= 0){
-						cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+						cout << "\033[91mYou idiot, lost the turn(this card does not exist!)\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
 						continue;
 					}
 					int use_card = 0;
-					while(use_card <= used.size()){
+					while(use_card <= used.size()){ //verif if the card was used
 						if(used[use_card] == select_card->getName()){
 							cout << "\033[91mYou already used this card!\033[0m" << endl;
 							cout << "Press a button to restore your intelligence" << endl;
@@ -290,7 +289,11 @@ void Playing(List* your_list, List* enemy_list){
 									int increaseboss = your_cards_on_field->BossPassive();
 									int infantarypassive = infantary->getDetermination() * (infantary->getStrength()/10);
 									Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
-									
+									if(enemy_select_card->getTanked() == true){
+										cout << "You broken the enemy block!" << endl;
+										enemy_select_card->setTanked(false);
+										continue;
+									}
 									cout << "You selected the ";
 									PrintColor(enemy_select_card->getType());
 									cout << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
@@ -303,7 +306,7 @@ void Playing(List* your_list, List* enemy_list){
 										cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 										cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 										enemy_count_field--;
-										enemy_can_put_boss++;
+										enemy_can_put_boss--;
 										cin >> the_play;
 										system("clear");
 										GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -327,7 +330,7 @@ void Playing(List* your_list, List* enemy_list){
 									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_manipulate);
 									enemy_count_field--;
 									you_count_field++;
-									enemy_can_put_boss++;
+									enemy_can_put_boss--;
 									enemy_cards_on_field->RemoveCard(int_play);
 									cout << "You're the mage!" << endl;
 								}else{
@@ -346,7 +349,7 @@ void Playing(List* your_list, List* enemy_list){
 								if(rand_hack <= tech->getHability() * 5){
 									your_cards_on_field = PutACardOnField(enemy_cards_on_field, your_cards_on_field, select_card_to_hack);
 									enemy_count_field--;
-									enemy_can_put_boss++;
+									enemy_can_put_boss--;
 									you_count_field++;
 									enemy_cards_on_field->RemoveCard(int_play);
 									cout << "H4CK3D!" << endl;
@@ -383,43 +386,21 @@ void Playing(List* your_list, List* enemy_list){
 								bool advantage = false;
 								Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
 								if(enemy_select_card == nullptr){
-									cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+									cout << "\033[91mYou idiot, lost the turn(this card does not exist!)\033[0m" << endl;
 									cout << "Press a button to restore your intelligence" << endl;
 									cin >> the_play;
 									continue;
 								}
-								if(enemy_select_card->getType() == "Boss"){
-									cout << "You selected the \033[95m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-								}else if(enemy_select_card->getType() == "Infantary"){
-									cout << "You selected the \033[93m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() == "Boss" || select_card->getType() == "Mage" || select_card->getType() == "Ranger"){
-										advantage = true;
-									}
-								}else if(enemy_select_card->getType() == "Mage"){
-									cout << "You selected the \033[34m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() == "Boss" || select_card->getType() == "Tank" || select_card->getType() == "Ranger"){
-										advantage = true;
-									}
-								}else if(enemy_select_card->getType() == "Tech"){
-									cout << "You selected the \033[91m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() == "Boss" || select_card->getType() == "Infantary" || select_card->getType() == "Mage"){
-										advantage = true;
-									}
-								}else if(enemy_select_card->getType() == "Tank"){
-									cout << "You selected the \033[37m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() == "Boss" || select_card->getType() == "Tech"){
-										advantage = true;
-									}
-								}else if(enemy_select_card->getType() == "Medic"){
-									cout << "You selected the \033[96m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() != "Tank" || select_card->getType() != "Medic"){
-										advantage = true;
-									}
-								}else if(enemy_select_card->getType() == "Ranger"){
-									cout << "You selected the \033[92m" << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
-									if(select_card->getType() != "Medic" || select_card->getType() != "Ranger"){
-										advantage = true;
-									}
+								if(enemy_select_card->getTanked() == true){
+									cout << "You broken the enemy block!" << endl;
+									enemy_select_card->setTanked(false);
+									continue;
+								}
+								cout << "You selected the ";
+								PrintColor(enemy_select_card->getType());
+								cout << enemy_select_card->getType() << " " << enemy_select_card->getName() << "\033[0m" << endl;
+								if(enemy_select_card->getType() == "Infantary" || enemy_select_card->getType() == "Mage" || enemy_select_card->getType() == "Medic"){
+									advantage = true;
 								}
 								int decreasemage = enemy_cards_on_field->MagePassive();
 								int increaseboss = your_cards_on_field->BossPassive();
@@ -437,7 +418,7 @@ void Playing(List* your_list, List* enemy_list){
 									cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 									cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 									enemy_count_field--;
-									enemy_can_put_boss++;
+									enemy_can_put_boss--;
 									cin >> the_play;
 									system("clear");
 									GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
@@ -450,13 +431,11 @@ void Playing(List* your_list, List* enemy_list){
 								}
 								select_card->setCooldown(2);
 							}
-						cout << "Please, \033[34mselect a card\033[0m to use" << endl;
-						cin >> int_play;
-						}
-						else if(int_play == 2){
+							continue;
+						}else if(int_play == 2){
 							cout << "Select a \033[91menemy\033[0m to attack" << endl;
 						}else{
-							cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+							cout << "\033[91mYou idiot, lost the turn(this option does not exist!)\033[0m" << endl;
 							cout << "Press a button to restore your intelligence" << endl;
 							cin >> the_play;
 							continue;
@@ -468,7 +447,7 @@ void Playing(List* your_list, List* enemy_list){
 					bool advantage = false;
 					Card* enemy_select_card = enemy_cards_on_field->SearchCard(int_play);
 					if(enemy_select_card == nullptr){
-						cout << "\033[91mYou idiot, lost the turn\033[0m" << endl;
+						cout << "\033[91mYou idiot, lost the turn(this card does not exist!)\033[0m" << endl;
 						cout << "Press a button to restore your intelligence" << endl;
 						cin >> the_play;
 						continue;
@@ -523,7 +502,7 @@ void Playing(List* your_list, List* enemy_list){
 						cout << "\033[1;93;91mTHE \033[1;93;13m" << enemy_select_card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13m" << select_card->getName() << "\033[0;0;0m"<< endl;
 						cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 						enemy_count_field--;
-						enemy_can_put_boss++;
+						enemy_can_put_boss--;
 						cin >> the_play;
 						system("clear");
 						GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);

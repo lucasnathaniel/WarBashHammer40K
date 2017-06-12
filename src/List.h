@@ -21,23 +21,23 @@ class List{
 		Card* First;
 	public:
 		List();
-    ~List();
-    Card* getFirst();
-    int getQuantity();
-    void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
-    void Insert(Card* new_card);
-    void PrintList();
-    Card* SearchCard(int indice);
-    void RemoveCard(int indice);
-    int Attack(int target, int damage);
-    void BossTremmor(int damage);
-    int MagePassive();
-    int RangerPassive();
-    int MedicPassive();
-    void MedicSunshine(int medic_cure);
-    void MageSpell(int mage_damage);
-    int BossPassive();
-    void ReduceCds();
+    	~List();
+    	Card* getFirst();
+    	int getQuantity();
+    	void Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability);
+    	void Insert(Card* new_card);
+    	void PrintList();
+    	Card* SearchCard(int indice);
+    	void RemoveCard(int indice);
+    	int Attack(int target, int damage);
+    	void BossTremmor(int damage);
+    	int RangerPassive();
+    	int MedicPassive();
+    	void MedicSunshine(int medic_cure);
+    	int MagePassive();
+    	void MageSpell(int mage_damage);
+    	int BossPassive();
+    	void ReduceCds();
 };
 
 #endif

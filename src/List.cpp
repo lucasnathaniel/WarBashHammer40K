@@ -209,17 +209,6 @@ void List::BossTremmor(int damage){
     }
 }
 
-int List::MagePassive(){
-    
-    int damage = 0;
-    for(Card* card = First; card != NULL; card = card->getNext()){
-        if(card->getType() == "Mage"){
-            Mage* mage = (Mage*)card;
-            damage += mage->getIntelligence() * 10;
-        }
-    }
-    return damage;
-}
 int List::RangerPassive(){
     int damage = 0;
     for(Card* card = First; card != NULL; card = card->getNext()){
@@ -230,8 +219,16 @@ int List::RangerPassive(){
     }
     return damage;
 }
+
 int List::MedicPassive(){
     int cure = 0;
+    if(Quantity == 1){
+    	if(First->getType() == "Medic"){
+            Medic* medic = (Medic*)First;
+            cure += medic->getCure() * 20;
+        	return cure;
+        }
+    }
     for(Card* card = First; card != NULL; card = card->getNext()){
         if(card->getType() == "Medic"){
             Medic* medic = (Medic*)card;
@@ -242,14 +239,31 @@ int List::MedicPassive(){
 }
 
 void List::MedicSunshine(int medic_cure){
-    Card* card = First;
-    for(int i = 1; i < this->Quantity; i++){
+    for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() + medic_cure);
     }
 }
+
+int List::MagePassive(){
+    int damage = 0;
+    if(Quantity == 1){
+    	if(First->getType() == "Mage"){
+            Mage* mage = (Mage*)First;
+            damage += mage->getIntelligence() * 10;
+        	return damage;
+        }
+    }
+    for(Card* card = First; card != NULL; card = card->getNext()){
+        if(card->getType() == "Mage"){
+            Mage* mage = (Mage*)card;
+            damage += mage->getIntelligence() * 10;
+        }
+    }
+    return damage;
+}
+
 void List::MageSpell(int mage_damage){
-    Card* card = First;
-    for(int i = 1; i < this->Quantity; i++){
+    for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() - mage_damage);
     }
 }
