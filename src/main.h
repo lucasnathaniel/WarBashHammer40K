@@ -1,5 +1,6 @@
 /**
   *@file main.h
+  *brief declarações do arquivo main.cpp
   */
 
 #include <iostream>

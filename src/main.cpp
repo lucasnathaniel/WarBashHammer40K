@@ -23,6 +23,9 @@
 #include "main.h"
 
 using namespace std;
+/**
+  *@brief principal função do programa
+  */
 int main(){
 
 	string start;

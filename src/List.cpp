@@ -1,9 +1,7 @@
 /**
   *@file List.cpp
   *@brief Arquivo com a implementação da lista
-  *
   */
-
 #include "List.h"
 #include "Card.h"
 /**
@@ -17,19 +15,29 @@ List::List(){
   *@brief Destrutor
   */
 List::~List(){
-
 }
 /**
-  *@brief retorna o primeiro elemento
+  *@brief getter First elemento da lista
+  *@return primeiro elemento da lista
   */
 Card* List::getFirst(){
 	return First;
 }
+/**
+  *@brief getter Quantidade de elementos da lista
+  *@return quantidade de elementos da lista
+  */
 int List::getQuantity(){
   return Quantity;
 }
 /**
-  *@brief insere um elemento no final da lista
+  *@brief insere um elemento no final da lista atraves dos parametros
+  *@param Type tipo da classe da carta
+  *@param Name nome da classe da carta
+  *@param Life vida da classe da carta
+  *@param Strength força da classe da carta
+  *@param Sanity sanidade da classe da carta
+  *@param Hability habilidade especial da classe da carta
   */
 void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, int Hability){
     Card* new_card;
@@ -66,7 +74,10 @@ void List::Insert(string Type, string Name, int Life, int Strength, int Sanity, 
     percorre->setNext(new_card);
     this->Quantity++;
 }
-
+/**
+  *@brief insere um elemento no final da lista atraves de carta passada por parametro
+  *@param new_card carta para ser inserida na lista
+  */
 void List::Insert(Card* new_card){
     Card* card;
     if(new_card->getType() == "Boss"){
@@ -114,7 +125,9 @@ void List::Insert(Card* new_card){
     percorre->setNext(card);
     this->Quantity++;
 }
-
+/**
+  *@brief Escreve a lista na tela
+  */
 void List::PrintList(){
 	int i = 1;
     for(Card* card = First; card != NULL; card = card->getNext()){
@@ -154,7 +167,11 @@ void List::PrintList(){
     }
     }
 }
-
+/**
+  *@brief Busca uma carta na lista
+  *@param indice indice passado para percorrer a lista
+  *@return retornar a carta achada
+  */
 Card* List::SearchCard(int indice){
 	if(indice>this->getQuantity() || indice == 0){
 		return nullptr;
@@ -168,7 +185,10 @@ Card* List::SearchCard(int indice){
 	}
 	return card;
 }
-
+/**
+  *@brief Remove uma carta na lista
+  *@param indice indice passado para percorrer a lista
+  */
 void List::RemoveCard(int indice){
 	
 	if(this->getQuantity() == 1){
@@ -193,6 +213,12 @@ void List::RemoveCard(int indice){
     delete run;
 	this->Quantity--;
 }
+/**
+  *@brief Seleciona um alvo para dar dano, caso o alvo morra, retorna o elemento
+  *@param target elemento para ser atacado
+  *@param damage dano para ser desferido
+  *@return retorna se o alvo morreu ou nao
+  */
 int List::Attack(int target, int damage){
     Card* card = First;
     int i = 1;
@@ -205,18 +231,31 @@ int List::Attack(int target, int damage){
     }
     return -1;
 }
-void List::BossTremmor(int damage){
-    Card* card = First;
-    for(int i = 1; i < this->Quantity; i++){
+/**
+  *@brief Habilidade ativa do Boss
+  *@param damage dano para ser desferido
+  *@return retorna os elementos que foram mortos
+  */
+vector<int> List::BossTremmor(int damage){
+    vector<int> vector_elements_to_remove;
+    int i = 1;
+    for(Card* card = First; card != NULL; card = card->getNext()){
         card->setLife(card->getLife() - damage);
-        if(card->getLife() <=0){
-            Card* nextdied = card->getNext();
-            RemoveCard(i);
-            card = nextdied;
+        if(card->getLife() <= 0){
+        	cout << "\033[1;93;91mTHE \033[1;93;13m" << card->getName() << "\033[1;93;91m WAS SLAIN BY \033[1;93;13mTHE BOSS\033[0;0;0m"<< endl;
+        	vector_elements_to_remove.push_back(i);
+        }
+        i++;
+        if(card->getNext() == card){
+        	return vector_elements_to_remove;
         }
     }
+    return vector_elements_to_remove;
 }
-
+/**
+  *@brief Passiva do ranger
+  *@return retorna a soma do dano de todos os rangers de um campo
+  */
 int List::RangerPassive(){
     int damage = 0;
     if(Quantity == 1){
@@ -237,7 +276,10 @@ int List::RangerPassive(){
     }
     return damage;
 }
-
+/**
+  *@brief Verifica se ha medicos na lista
+  *@return retorna a soma da cura de todos os medicos da lista
+  */
 int List::MedicPassive(){
     int cure = 0;
     if(Quantity == 1){
@@ -258,7 +300,10 @@ int List::MedicPassive(){
     }
     return cure;
 }
-
+/**
+  *@brief continuacao da passiva do medico, percorre a lista e adiciona a cura
+  *@param cura para ser adicionada
+  */
 void List::MedicSunshine(int medic_cure){
     if(Quantity == 0){
     	return;
@@ -271,7 +316,10 @@ void List::MedicSunshine(int medic_cure){
         }
     }
 }
-
+/**
+  *@brief Habilidade passiva do mago, verifica se ha magos na lista e retorna o dano
+  *@return retorna o dano referido aos magos do lado oposto
+  */
 int List::MagePassive(){
     int damage = 0;
     if(Quantity == 1){
@@ -292,7 +340,11 @@ int List::MagePassive(){
     }
     return damage;
 }
-
+/**
+  *@brief continuacao da passiva do mago
+  *@param damage dano para ser desferido
+  *@return retorna os elementos que foram mortos
+  */
 vector<int> List::MageSpell(int mage_damage){
     vector<int> vector_elements_to_remove;
     int i = 1;
@@ -309,6 +361,10 @@ vector<int> List::MageSpell(int mage_damage){
     }
     return vector_elements_to_remove;
 }
+/**
+  *@brief Passiva do Boss
+  *@return retorna o dano adicional caso haja algum boss
+  */
 int List::BossPassive(){
     for(Card* card = First; card != NULL; card = card->getNext()){
         if(card->getType() == "Boss"){
@@ -318,7 +374,9 @@ int List::BossPassive(){
     }
     return 0;
 }
-
+/**
+  *@brief Diminui os cooldowns das cartas
+  */
 void List::ReduceCds(){
     for(Card* card = First; card != NULL; card = card->getNext()){
         card->setCooldown(card->getCooldown()-1);

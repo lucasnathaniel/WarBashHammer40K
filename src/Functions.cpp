@@ -1,5 +1,11 @@
+/**
+  *@file Functions.cpp
+  *@brief Arquivo com a implementação das principais funcções
+  */
 #include "Functions.h"
-
+/**
+  *@brief Interface super legal e bacana que vai me garantir um 10 no projeto
+  */
 void Interface(){
 
 cout << " \033[01;93m __          __        \033[96m____            _                        " << endl;
@@ -15,7 +21,9 @@ cout << " \033[01;93m |_|  |_|\\__,_|_| |_| |_|_| |_| |_|\\___|_|     \033[31m|_
 
   cout <<"\n\033[96mWelcome to the \033[01;93mWar\033[96mBash\033[01;93mHammer\033[96m, press \033[31mstart\033[00;0m" << endl;
 }
-
+/**
+  *@brief Menu do StartGame, para escolher as raças para serem jogadas
+  */
 void StartGame(){
 
 	cout << "\n\033[96mChoose your race!\033[0m" << endl;
@@ -62,7 +70,11 @@ void StartGame(){
 	cin >> start;
 	Playing(your_list, enemy_list);
 }
-
+/**
+  *@brief Função de leitura das raças
+  *@param address endereço para ser lido
+  *@return Retorna a lista da raça que foi lida
+  */
 List* ReadRace(string address){
 	List *race = new List();
 	ifstream database(address);
@@ -85,7 +97,10 @@ List* ReadRace(string address){
 }
 
 /**
-  *@brief Separe string on substrings
+  *@brief Separador de strings em substrings
+  *@param str string para ser dividida
+  *@param delim char que irá dividir a string
+  *@param pieces vetor para receber as substrings
   */
 void part(string& str, char delim, vector<string>& pieces){
     
@@ -100,7 +115,12 @@ void part(string& str, char delim, vector<string>& pieces){
             pieces.push_back(str.substr(i, str.length()));
     }
 }
-
+/**
+  *@brief Principal função do jogo
+  Aqui ocorre toda a jogabilidade do game, qualquer duvida, mande um e-mail para: lucasnataniel@hotmail.com
+  *@param your_list sua lista
+  *@param enemy_list lista inimiga
+  */
 void Playing(List* your_list, List* enemy_list){
 	
 	srand (time(NULL));
@@ -207,7 +227,16 @@ void Playing(List* your_list, List* enemy_list){
 						int decreasemage = your_cards_on_field->MagePassive();
 						int tremmor_damage = (boss->getFury() * boss->getStrength()/10) - decreasemage;
 									
-						your_cards_on_field->BossTremmor(tremmor_damage); // you received damage
+						vector<int> vector_tremmor = enemy_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
+						int vector_size = vector_tremmor.size();
+						if(vector_size != 0){
+							you_count_field-= vector_size;
+							you_can_put_boss-= vector_size;
+							cout << "\033[91mYours cards received -" << tremmor_damage << " of the enemy BOSS!\033[0m" << endl;
+							for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
+								your_cards_on_field->RemoveCard(elements_to_remove);
+							}
+						}
 						enemy_select_card->setCooldown(3);
 					}else if(enemy_select_card->getType() == "Infantary"){
 						cout << "Battleon(2 rounds): attack 2 times." << endl;
@@ -608,8 +637,18 @@ void Playing(List* your_list, List* enemy_list){
 								int decreasemage = enemy_cards_on_field->MagePassive();//if have mage on the enemy field, this active her passive
 								int tremmor_damage = (boss->getFury() * boss->getStrength()/10) - decreasemage;
 								
-								enemy_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
+								vector<int> vector_tremmor = your_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
+								int vector_size = vector_tremmor.size();
+								if(vector_size != 0){
+									enemy_count_field-= vector_size;
+									enemy_can_put_boss-= vector_size;
+									cout << "\033[91mEnemy cards received -" << tremmor_damage << " of your BOSS!\033[0m" << endl;
+									for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
+										enemy_cards_on_field->RemoveCard(elements_to_remove);
+									}
+								}
 								select_card->setCooldown(3);
+
 							}else if(select_card->getType() == "Infantary"){
 								cout << "Battleon(2 rounds): attack 2 times." << endl;
 								Infantary* infantary = (Infantary*)select_card;
@@ -865,7 +904,12 @@ void Playing(List* your_list, List* enemy_list){
 		cout << "NOT BAD :|" << endl;
 	}
 }
-
+/**
+  *@brief Mini-interface para organizar o jogo
+  *@param your_list sua lista
+  *@param your_cards_on_fiel suas cartas que estão no campo
+  *@param enemy_cards_on_fiel cartas do inimigo que estão no campo
+  */
 void GameInterface(List* your_list, List* your_cards_on_field, List* enemy_cards_on_field){
 	cout << "Your Deck:" << endl;
 	if(your_list->getQuantity() != 0){
@@ -881,7 +925,13 @@ void GameInterface(List* your_list, List* your_cards_on_field, List* enemy_cards
 
 
 }
-
+/**
+  *@brief A função coloca sua carta no campo
+  *@param your_list sua lista
+  *@param your_cards_on_fiel suas cartas que estão no campo
+  *@param put_card carta para ser colocada
+  *@return retorna a lista atualizada
+  */
 List* PutACardOnField(List* your_list, List* your_cards_on_field, Card* put_card){
 	
 	your_cards_on_field->Insert(put_card);
@@ -891,7 +941,10 @@ List* PutACardOnField(List* your_list, List* your_cards_on_field, Card* put_card
 	
 	return your_cards_on_field;
 }
-
+/**
+  *@brief Função para selecionar a cor de uma classe
+  *@param classe classe
+  */
 void PrintColor(string classe){
 	if(classe == "Boss"){
 		cout << "\033[95m";
@@ -909,7 +962,9 @@ void PrintColor(string classe){
 		cout << "\033[92m";
 	}
 }
-
+/**
+  *@brief Tutorial
+  */
 void Tutorial(){
 	
 	system("clear");
@@ -925,7 +980,9 @@ void Tutorial(){
 	cout << "*see about this on 'ClassTable' option." << endl;
 	cout << "**see about this on 'About Races' option.\033[0m" << endl;
 }
-
+/**
+  *@brief Tabela de classes
+  */
 void ClassTable(){
 	
 	system("clear");
@@ -962,7 +1019,9 @@ void ClassTable(){
 	cout << "\033[96mMedic\033[0m    : Sunshine(2 round): Heal and give +500 HP for a ally." << endl;
 	cout << "\033[92mRanger\033[0m   : Ragnarok(2 rounds): Select a enemy to give a critic shot(200% damage(25% chance))." << endl;
 }
-
+/**
+  *@brief Sobre as classes
+  */
 void AboutRaces(){
 
 	system("clear");
