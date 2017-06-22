@@ -150,12 +150,14 @@ void Playing(List* your_list, List* enemy_list){
 				int mage_passive = your_cards_on_field->MagePassive();
 				vector<int> vector_to_remove = enemy_cards_on_field->MageSpell(mage_passive);
 				int vector_size = vector_to_remove.size();
+				if(mage_passive != 0){
+					cout << "\033[91mEnemy cards received -" << mage_passive << " of the Your Mage(s)!\033[0m" << endl;
+				}
 				if(vector_size != 0){
 					enemy_count_field-= vector_size;
 					enemy_can_put_boss-= vector_size;
-					cout << "\033[91mEnemy cards received -" << mage_passive << " of the your Mage(s)!\033[0m" << endl;
 					for(int elements_to_remove = 0; elements_to_remove < vector_size; elements_to_remove++){
-						enemy_cards_on_field->RemoveCard(elements_to_remove);
+						enemy_cards_on_field->RemoveCard(vector_to_remove[elements_to_remove]);
 					}
 				}
 			}
@@ -229,12 +231,14 @@ void Playing(List* your_list, List* enemy_list){
 									
 						vector<int> vector_tremmor = enemy_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
 						int vector_size = vector_tremmor.size();
+						if(tremmor_damage != 0){
+							cout << "\033[91mYours cards received -" << tremmor_damage << " of the enemy BOSS!\033[0m" << endl;
+						}
 						if(vector_size != 0){
 							you_count_field-= vector_size;
 							you_can_put_boss-= vector_size;
-							cout << "\033[91mYours cards received -" << tremmor_damage << " of the enemy BOSS!\033[0m" << endl;
 							for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
-								your_cards_on_field->RemoveCard(elements_to_remove);
+								your_cards_on_field->RemoveCard(vector_tremmor[elements_to_remove]);
 							}
 						}
 						enemy_select_card->setCooldown(3);
@@ -511,12 +515,14 @@ void Playing(List* your_list, List* enemy_list){
 			int mage_passive = enemy_cards_on_field->MagePassive();
 			vector<int> vector_to_remove = your_cards_on_field->MageSpell(mage_passive);
 			int vector_size = vector_to_remove.size();
+			if(mage_passive != 0){
+				cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
+			}
 			if(vector_size != 0){
 				you_count_field-= vector_size;
 				you_can_put_boss-= vector_size;
-				cout << "\033[91mYour cards received -" << mage_passive << " of the enemy(s) Mage(s)!\033[0m" << endl;
 				for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
-					your_cards_on_field->RemoveCard(elements_to_remove);
+					your_cards_on_field->RemoveCard(vector_to_remove[elements_to_remove]);
 				}
 			}
 		}
@@ -555,7 +561,7 @@ void Playing(List* your_list, List* enemy_list){
 				cin >> the_play;
 			}
 		}else{
-			if(your_list->getQuantity() != 0){ //If have cards on field and cards on hand
+			if(your_list->getQuantity() != 0 || (your_list->getQuantity() == 1 && your_list->SearchCard(1)->getType() != "Boss" )){ //If have cards on field and cards on hand and if the one card dont is boss
 				cout << "Please, \033[34mselect a card\033[0m to put" << endl;
 				cin >> int_play;
 				Card* put_card = your_list->SearchCard(int_play);
@@ -608,8 +614,8 @@ void Playing(List* your_list, List* enemy_list){
 						cin >> the_play;
 						continue;
 					}
-					int use_card = 0;
 					int size_used = used.size();
+					int use_card = 0;
 					while(use_card <= size_used){ //verif if the card was used
 						if(used[use_card] == select_card->getName()){
 							cout << "\033[91mYou already used this card!\033[0m" << endl;
@@ -639,12 +645,14 @@ void Playing(List* your_list, List* enemy_list){
 								
 								vector<int> vector_tremmor = your_cards_on_field->BossTremmor(tremmor_damage); // enemy received damage
 								int vector_size = vector_tremmor.size();
+								if(tremmor_damage != 0){
+									cout << "\033[91mEnemy cards received -" << tremmor_damage << " of your BOSS!\033[0m" << endl;
+								}
 								if(vector_size != 0){
 									enemy_count_field-= vector_size;
 									enemy_can_put_boss-= vector_size;
-									cout << "\033[91mEnemy cards received -" << tremmor_damage << " of your BOSS!\033[0m" << endl;
 									for(int elements_to_remove = 0; elements_to_remove <= vector_size-1; elements_to_remove++){
-										enemy_cards_on_field->RemoveCard(elements_to_remove);
+										enemy_cards_on_field->RemoveCard(vector_tremmor[elements_to_remove]);
 									}
 								}
 								select_card->setCooldown(3);
