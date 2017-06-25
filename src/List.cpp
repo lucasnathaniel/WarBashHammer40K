@@ -210,7 +210,7 @@ void List::RemoveCard(int indice){
 		run = run_before->getNext();
 	}
 	run_before->setNext(run->getNext());
-    delete run;
+  delete run;
 	this->Quantity--;
 }
 /**
