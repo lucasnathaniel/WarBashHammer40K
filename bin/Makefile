@@ -1,24 +1,30 @@
 PROG = WarBashHammer40K
 CC = g++
-
 CPPFLAGS = -O0 -g -Wall -pedantic -std=c++11
-
+LIB = ../lib
+SRC = ../src
 OBJS = main.o Card.o List.o Functions.o
 
+linux: Jokenpo.a WarBashHammer40K
+
 $(PROG) : $(OBJS)
-	$(CC) -o $(PROG) $(OBJS)
+	$(CC) -o $(PROG) $(OBJS) $(LIB)/Jokenpo.a -o $@
 
-main.o : ../src/main.cpp ../src/main.h
-	$(CC) $(CPPFLAGS) -c ../src/main.cpp
+main.o : $(SRC)/main.cpp $(SRC)/main.h
+	$(CC) $(CPPFLAGS) -c $(SRC)/main.cpp
 
-Card.o : ../src/Card.cpp ../src/Card.h
-	$(CC) $(CPPFLAGS) -c ../src/Card.cpp
+Card.o : $(SRC)/Card.cpp $(SRC)/Card.h
+	$(CC) $(CPPFLAGS) -c $(SRC)/Card.cpp
 
-List.o : ../src/List.cpp ../src/List.h
-	$(CC) $(CPPFLAGS) -c ../src/List.cpp
+List.o : $(SRC)/List.cpp $(SRC)/List.h
+	$(CC) $(CPPFLAGS) -c $(SRC)/List.cpp
 
-Functions.o : ../src/Functions.cpp ../src/Functions.h
-	$(CC) $(CPPFLAGS) -c ../src/Functions.cpp
+Functions.o : $(SRC)/Functions.cpp $(SRC)/Functions.h
+	$(CC) $(CPPFLAGS) -c $(SRC)/Functions.cpp
+
+Jokenpo.a: $(SRC)/Jokenpo.cpp $(SRC)/Jokenpo.h
+	$(CC) $(CFLAGS) -c $(SRC)/Jokenpo.cpp -o Jokenpo.o
+	$(AR) rcs $(LIB)/$@ Jokenpo.o
 
 clean:
-	rm -f core $(PROG) $(OBJS)
+	rm -f core $(PROG) $(OBJS) Jokenpo.o $(LIB)/Jokenpo.a

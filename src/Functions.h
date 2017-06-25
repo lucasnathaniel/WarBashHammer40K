@@ -6,13 +6,16 @@
 #ifndef __FUNCTIONS_H__
 #define __FUNCTIONS_H__
 
-using namespace std;
 #include <iostream>
 #include <string>
 #include <vector>
 #include <sstream>
 #include "Card.h"
 #include "List.h"
+#include "Jokenpo.h"
+
+using namespace std;
+using namespace Jokenpo;
 /**
   *@brief Interface super legal e bacana que vai me garantir um 10 no projeto
   */
@@ -47,6 +50,8 @@ void Playing(List* your_list, List* enemy_list);
   *@param your_cards_on_fiel suas cartas que estão no campo
   *@param enemy_cards_on_fiel cartas do inimigo que estão no campo
   */
+void ReplayingWin(List* your_list);
+void ReplayingLoose(List* enemy_list);
 void GameInterface(List* your_list, List* your_cards_on_field, List* enemy_cards_on_field);
 /**
   *@brief A função coloca sua carta no campo

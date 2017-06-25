@@ -136,8 +136,8 @@ void Playing(List* your_list, List* enemy_list){
 	List* enemy_cards_on_field = new List();
 	while(1){
 		system("clear");
-		cout << "Cards on your hand: " << your_list->getQuantity() << " Cards on your field: " << you_count_field << endl;
-		cout << "Cards on enemy hand: " << enemy_list->getQuantity() << " Cards on enemy field: " << enemy_count_field << endl;
+		//cout << "Cards on your hand: " << your_list->getQuantity() << " Cards on your field: " << you_count_field << endl;
+		//cout << "Cards on enemy hand: " << enemy_list->getQuantity() << " Cards on enemy field: " << enemy_count_field << endl;
 		if((your_list->getQuantity() == 0 && you_count_field == 0) || (enemy_list->getQuantity() == 0 && enemy_count_field == 0)){
 			break;
 		}
@@ -208,7 +208,7 @@ void Playing(List* your_list, List* enemy_list){
 			}
 			bool_puted = true;
 		}
-		for(int cards_to_use = 1; cards_to_use <= you_count_field; cards_to_use++){
+		for(int cards_to_use = 1; cards_to_use <= enemy_count_field; cards_to_use++){
 			if(if_died_by_rangers){
 				break;
 			}
@@ -761,6 +761,8 @@ void Playing(List* your_list, List* enemy_list){
 								}
 								cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
 								cin >> the_play;
+								system("clear");
+								GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
 								select_card->setCooldown(3);
 							}else if(select_card->getType() == "Tank"){
 								cout << "Mountain(2 rounds): Select a ally to block your next damage" << endl;
@@ -920,22 +922,84 @@ void Playing(List* your_list, List* enemy_list){
 				you_count_field++;
 			}
 		}//end of else
-	cout << "\nPress some \033[34mbutton\033[0m to continue" << endl;
-	cin >> the_play;
 	}
 	GameInterface(your_list, your_cards_on_field, enemy_cards_on_field);
-	if(your_list->getQuantity() == 0){
-		for(int i = 0; i<=200; i++){
+	if(your_list->getQuantity() == 0 && your_cards_on_field->getQuantity() == 0){
+		for(int i = 0; i<=150; i++){
 			cout << "\033[" << i%8+30 <<"mYOU LOOSE, NOOOOB, TRASH!!!!! HAHAHAHA" << endl;
 		}
 		cout << "\033[0m";
 		cout << endl;
+		for(int x=enemy_count_field; x>0; x--){
+			Card* put_card = enemy_cards_on_field->SearchCard(x);
+			enemy_list = PutACardOnField(enemy_cards_on_field, enemy_list, put_card);
+			enemy_cards_on_field->RemoveCard(x);
+		}
+		ReplayingLoose(enemy_list);
 	}
-	if(enemy_list->getQuantity() == 0){
+	if(enemy_list->getQuantity() == 0 && enemy_cards_on_field->getQuantity() == 0){
 		cout << "NOT BAD :|" << endl;
+		for(int x=you_count_field; x>0; x--){
+			Card* put_card = your_cards_on_field->SearchCard(x);
+			your_list = PutACardOnField(your_cards_on_field, your_list, put_card);
+			your_cards_on_field->RemoveCard(x);
+		}
+		ReplayingWin(your_list);
 	}
 	delete your_cards_on_field;
 	delete enemy_cards_on_field;
+}
+void ReplayingWin(List* your_list){
+	cout << "You win! But now the enemy have 5 tries to get cards and defeat you!" << endl;
+	cout << "Enemy'll play now 5 Jokenpos to get this!" << endl;
+	string address = "../db/DeathLord.txt";
+	List *DeathLord_list = ReadRace(address);
+	List *enemy_list;
+	for(int i = 0; i < 5; i++){
+		
+		int joken = PlayJokenpo(); 
+		if(joken == 0){
+			i--;
+		}else if(joken == 1){
+			int random = (rand() % DeathLord_list->getQuantity()) + 1;
+			Card* put_card = DeathLord_list->SearchCard(random);
+			enemy_list->Insert(put_card);
+			cout << "Enemy got: " << put_card->getName() << endl;
+		}
+	}
+	if(enemy_list->getQuantity() != 0){
+		cout << "Final cards:" << endl;
+		enemy_list->PrintList();
+		Playing(your_list, enemy_list);
+	}else{
+		cout << "You win :)" << endl;
+	}
+}
+void ReplayingLoose(List* enemy_list){
+	cout << "You died! But now you have 5 tries to get cards and defeat the enemy!" << endl;
+	cout << "You'll play now 5 Jokenpos to get this!" << endl;
+	string address = "../db/DeathLord.txt";
+	List *DeathLord_list = ReadRace(address);
+	List *your_list;
+	for(int i = 0; i < 5; i++){
+		
+		int joken = PlayJokenpo();
+		if(joken == 0){
+			i--;
+		}else if(joken == 1){
+			int random = (rand() % DeathLord_list->getQuantity()) + 1;
+			Card* put_card = DeathLord_list->SearchCard(random);
+			your_list->Insert(put_card);
+			cout << "You got: " << put_card->getName() << endl;
+		}
+	}
+	if(your_list->getQuantity() != 0){
+		cout << "Final cards:" << endl;
+		your_list->PrintList();
+		Playing(your_list, enemy_list);
+	}else{
+		cout << "You cant back, KKKKASHAHSUUHEASKKEASH3HHU3UH3HUALSEHAUSH" << endl;
+	}
 }
 /**
   *@brief Mini-interface para organizar o jogo
