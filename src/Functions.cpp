@@ -130,6 +130,7 @@ void Playing(List* your_list, List* enemy_list){
 	char the_play;
 	int int_play;
 	bool retry;
+	bool First_play = true;
 	int you_can_put_boss = 3; //when this is 0, you can put boss, this decrease when you lost a card
 	int enemy_can_put_boss = 3; // /\ for enemy
 	List* your_cards_on_field = new List();
@@ -930,43 +931,51 @@ void Playing(List* your_list, List* enemy_list){
 		}
 		cout << "\033[0m";
 		cout << endl;
-		for(int x=enemy_count_field; x>0; x--){
-			Card* put_card = enemy_cards_on_field->SearchCard(x);
-			enemy_list = PutACardOnField(enemy_cards_on_field, enemy_list, put_card);
-			enemy_cards_on_field->RemoveCard(x);
+		if(First_play){
+			First_play = false;
+			for(int x=enemy_count_field; x>0; x--){
+				Card* put_card = enemy_cards_on_field->SearchCard(x);
+				enemy_list = PutACardOnField(enemy_cards_on_field, enemy_list, put_card);
+				enemy_cards_on_field->RemoveCard(x);
+			}
+			ReplayingLoose(enemy_list, your_list);	
 		}
-		ReplayingLoose(enemy_list);
+		
 	}
 	if(enemy_list->getQuantity() == 0 && enemy_cards_on_field->getQuantity() == 0){
 		cout << "NOT BAD :|" << endl;
-		for(int x=you_count_field; x>0; x--){
-			Card* put_card = your_cards_on_field->SearchCard(x);
-			your_list = PutACardOnField(your_cards_on_field, your_list, put_card);
-			your_cards_on_field->RemoveCard(x);
+		if(First_play){
+			First_play = false;
+			for(int x=you_count_field; x>0; x--){
+				Card* put_card = your_cards_on_field->SearchCard(x);
+				your_list = PutACardOnField(your_cards_on_field, your_list, put_card);
+				your_cards_on_field->RemoveCard(x);
+			}
+			ReplayingWin(your_list, enemy_list);
 		}
-		ReplayingWin(your_list);
+		
 	}
 	delete your_cards_on_field;
 	delete enemy_cards_on_field;
 }
-void ReplayingWin(List* your_list){
+void ReplayingWin(List* your_list, List* enemy_list){
+	enemy_list->Insert(your_list->SearchCard(1)); // bug do milenio se nao botar isso buga na deathlord_list, depois remover
 	cout << "You win! But now the enemy have 5 tries to get cards and defeat you!" << endl;
 	cout << "Enemy'll play now 5 Jokenpos to get this!" << endl;
 	string address = "../db/DeathLord.txt";
 	List *DeathLord_list = ReadRace(address);
-	List *enemy_list;
 	for(int i = 0; i < 5; i++){
-		
 		int joken = PlayJokenpo(); 
 		if(joken == 0){
 			i--;
 		}else if(joken == 1){
 			int random = (rand() % DeathLord_list->getQuantity()) + 1;
 			Card* put_card = DeathLord_list->SearchCard(random);
-			enemy_list->Insert(put_card);
 			cout << "Enemy got: " << put_card->getName() << endl;
+			enemy_list->Insert(put_card);
 		}
 	}
+	enemy_list->RemoveCard(1);
 	if(enemy_list->getQuantity() != 0){
 		cout << "Final cards:" << endl;
 		enemy_list->PrintList();
@@ -975,24 +984,24 @@ void ReplayingWin(List* your_list){
 		cout << "You win :)" << endl;
 	}
 }
-void ReplayingLoose(List* enemy_list){
+void ReplayingLoose(List* enemy_list, List* your_list){
+	your_list->Insert(enemy_list->SearchCard(1)); // bug do milenio se nao botar isso buga na deathlord_list, depois remover
 	cout << "You died! But now you have 5 tries to get cards and defeat the enemy!" << endl;
 	cout << "You'll play now 5 Jokenpos to get this!" << endl;
 	string address = "../db/DeathLord.txt";
 	List *DeathLord_list = ReadRace(address);
-	List *your_list;
 	for(int i = 0; i < 5; i++){
-		
 		int joken = PlayJokenpo();
 		if(joken == 0){
 			i--;
 		}else if(joken == 1){
 			int random = (rand() % DeathLord_list->getQuantity()) + 1;
 			Card* put_card = DeathLord_list->SearchCard(random);
-			your_list->Insert(put_card);
 			cout << "You got: " << put_card->getName() << endl;
+			your_list->Insert(put_card);
 		}
 	}
+	your_list->RemoveCard(1);
 	if(your_list->getQuantity() != 0){
 		cout << "Final cards:" << endl;
 		your_list->PrintList();

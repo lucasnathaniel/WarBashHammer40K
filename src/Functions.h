@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <list>
 #include "Card.h"
 #include "List.h"
 #include "Jokenpo.h"
@@ -50,8 +51,8 @@ void Playing(List* your_list, List* enemy_list);
   *@param your_cards_on_fiel suas cartas que estão no campo
   *@param enemy_cards_on_fiel cartas do inimigo que estão no campo
   */
-void ReplayingWin(List* your_list);
-void ReplayingLoose(List* enemy_list);
+void ReplayingWin(List* your_list, List* enemy_list);
+void ReplayingLoose(List* enemy_list, List* your_list);
 void GameInterface(List* your_list, List* your_cards_on_field, List* enemy_cards_on_field);
 /**
   *@brief A função coloca sua carta no campo

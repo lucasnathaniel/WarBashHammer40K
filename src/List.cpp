@@ -8,7 +8,7 @@
   *@brief Construtor
   */
 List::List(){
-    First = NULL;
+    this->First = nullptr;
     this->Quantity = 0;
 }
 /**
@@ -105,22 +105,22 @@ void List::Insert(Card* new_card){
     	cout << "Unidef type, exit!" << endl;
     	exit(0);
     }
-    if(First == NULL){
+    if(First == nullptr){
     	card->setNext(First);
     	First = card;
     	this->Quantity++;
-		return;
-	}
+		  return;
+	  }
     
     Card* percorre = First;
     
-    while(percorre->getNext() != NULL){
-    	percorre = percorre->getNext();
+    while(percorre->getNext() != nullptr){
     	if(percorre->getNext() == percorre){
     		percorre->setNext(card);
     		this->Quantity++;
     		return;
     	}
+      percorre = percorre->getNext();
     }
     percorre->setNext(card);
     this->Quantity++;
